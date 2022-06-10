@@ -1,0 +1,9 @@
+backend/venv*
+backend/**/__pycache*
+backend/**/*.env
+backend/logs/
+backend/**/*.sh
+backend/email
+backend/.coverage
+backend/htmlcov
+backend/db.sqlite*
