@@ -70,14 +70,14 @@ WSGI_APPLICATION = 'src.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': os.environ.get('DB_NAME'),
-    #     'USER': os.environ.get('DB_USER'),
-    #     'PASSWORD': os.environ.get('DB_PASS'),
-    #     'HOST': 'localhost',
-    #     'PORT': 5432
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASS'),
+        'HOST': 'db',
+        'PORT': 5432
+    }
 }
 
 
@@ -122,3 +122,11 @@ STATIC_ROOT = BASE_DIR / 'staticfiles/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Django custom user model
+AUTH_USER_MODEL = 'openuser.User'
+
+# Django authentication settings
+AUTHENTICATION_BACKENDS = [
+    'openuser.authentications.CustomUserBackend',
+]
