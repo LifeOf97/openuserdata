@@ -146,7 +146,7 @@ class User(AbstractUser):
         return super().save(*args, **kwargs)
 
     def __str__(self) -> str:
-        return F"{self.cid or None}-{self.app_name or None}-{self.username or None}"
+        return F"{self.cid or ''}-{self.app_name or ''}-{self.username or ''}"
 
     def get_full_name(self) -> str:
         return F"{self.first_name or ''} {self.last_name or ''} {self.other_name or ''}"
@@ -169,3 +169,7 @@ class Address(models.Model):
     city = models.CharField(_("City"), max_length=255, blank=True, null=True)
     postal = models.CharField(_("Postal/ZIP"), max_length=20, blank=True, null=True)
     street = models.CharField(_("Street"), max_length=255, blank=True, null=True)
+
+    class Meta:
+        ordering = ['country']
+        verbose_name_plural = 'Addresses'
