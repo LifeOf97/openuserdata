@@ -1,12 +1,12 @@
 from django.contrib.auth.models import BaseUserManager, AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.db.models.functions import Length
+from django.utils.text import slugify
 from django.core import validators
 from django.conf import settings
 from django.db import models
 from typing import List
 import uuid
-
 
 # Register __length
 models.CharField.register_lookup(Length)
@@ -76,7 +76,7 @@ class User(AbstractUser):
     uid = models.CharField(_("UID"), max_length=15, unique=True, default=get_random_int, help_text=_("User Unique ID"))
     cid = models.CharField(_("CID"), max_length=15, blank=True, null=True, help_text=_("The creators ID"))
     app_name = models.CharField(
-        _("App Name"), max_length=20, blank=True, null=True,
+        _("App Name"), max_length=20, blank=False, null=False,
         validators=[
             validators.RegexValidator(
                 regex=r'^[a-zA-Z]([\w -]*[a-zA-Z])?$',
@@ -130,7 +130,7 @@ class User(AbstractUser):
     objects = UserManager()
 
     USERNAME_FIELD: str = 'username'
-    REQUIRED_FIELDS: List[str] = ['email']
+    REQUIRED_FIELDS: List[str] = ['email', 'app_name']
 
     class Meta:
         constraints = [
@@ -140,13 +140,13 @@ class User(AbstractUser):
         ordering = ['-date_joined']
 
     def save(self, *args, **kwargs):
-        # converts usernames to lowercase and replaces spaces with underscores
-        self.username = str(self.username).replace(' ', '_').lower()
+        self.username = self.username.replace(' ', '_').lower()
+        self.app_name = slugify(self.app_name.replace('_', ' '))
         self.email = self.email.lower()
         return super().save(*args, **kwargs)
 
     def __str__(self) -> str:
-        return F"{self.cid or ''}-{self.app_name or ''}-{self.username or ''}"
+        return F"{self.username or ''} ({self.app_name or ''})"
 
     def get_full_name(self) -> str:
         return F"{self.first_name or ''} {self.last_name or ''} {self.other_name or ''}"
@@ -173,3 +173,15 @@ class Address(models.Model):
     class Meta:
         ordering = ['country']
         verbose_name_plural = 'Addresses'
+
+
+class OpenuserCreator(models.Model):
+    id = models.BigAutoField(_("ID"), primary_key=True, unique=True, editable=False, help_text=_("Creators ID"))
+    cid = models.CharField(_("CID"), max_length=15, blank=True, null=True, help_text=_("The creators ID"))
+    username = models.CharField(_("Username"), max_length=255, blank=True, null=True, help_text=_("Creators username"))
+
+    class Meta:
+        verbose_name_plural = 'Openuserceators'
+
+    def __str__(self) -> str:
+        return self.cid

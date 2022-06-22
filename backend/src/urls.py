@@ -6,6 +6,6 @@ from openuser.admin import admin_site
 
 urlpatterns = [
     path('admin/', admin_site.urls),
-    path('', RedirectView.as_view(url='api/')),
-    path('api/', include("openuser.urls", namespace="v1"))
+    path('', RedirectView.as_view(url='api/v1/')),
+    path('api/v1/', include("openuser.urls", namespace="v1"))
 ]

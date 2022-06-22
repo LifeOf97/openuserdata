@@ -1,12 +1,18 @@
 from pathlib import Path
-from dotenv import load_dotenv
 import os
+
+# Developer detail
+DEVELOPER = {
+    'FIRST_NAME': 'Kelvin',
+    'LAST_NAME': 'Mayowa',
+    'OTHER_NAME': 'Ayeni',
+    'ALIAS': 'realestKMA',
+    'CURRENT_LOCATION': 'Abuja, Nigeria'
+}
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load .env file
-load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -75,7 +81,7 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASS'),
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': 5432
     }
 }
@@ -130,3 +136,35 @@ AUTH_USER_MODEL = 'openuser.User'
 AUTHENTICATION_BACKENDS = [
     'openuser.authentications.CustomUserBackend',
 ]
+
+# DjangoRestframework settings
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONOpenAPIRenderer',
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    'DEFAULT_VERSION': 'v1',
+    'ALLOWED_VERSIONS': ['v1'],
+    'VERSION_PARAM': 'version',
+}
+
+
+# Developer settings
+MAX_NUMBER_OF_PROFILES = 25
+
+# Celery settings
+CELERY_BROKER_URL = os.environ.get('REDIS_URL')
+CELERY_TIMEZONE = 'Africa/Lagos'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = None
+# CELERY_BROKER_POOL_LIMIT = 1
+# CELERY_BROKER_HEARTBEAT = None
+# CELERY_BROKER_CONNECTION_TIMEOUT = 30
+# CELERY_EVENT_QUEUE_EXPIRES = 60
+# CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+# CELERY_WORKER_CONCURRENCY = 50
