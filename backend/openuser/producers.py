@@ -1,10 +1,7 @@
 from pika.exchange_type import ExchangeType
-from dotenv import load_dotenv
 import pika
+import json
 import os
-
-# Load env fil
-load_dotenv()
 
 
 class RabbitMQProducer:
@@ -24,17 +21,12 @@ class RabbitMQProducer:
             durable=True
         )
 
-    def _publish_message(self, routing_key, body, **props):
+    def publish_update_openuserapp(self, data, routing_key='update_openuserapp'):
         self._channel.basic_publish(
             exchange=self.EXCHANGE_NAME,
-            routing_key=routing_key,
-            body=body,
-            properties=pika.BasicProperties(**props)
-        )
-
-    def publish_update_openuserapp(self, data, routing_key='update_openuserapp'):
-        self._publish_message(
             routing_key=str(routing_key),
-            body=data,
-            props={'content_type': 'application/json'}
+            body=json.dumps(data),
+            properties=pika.BasicProperties(
+                content_type='application/json'
+            )
         )

@@ -135,7 +135,6 @@ class User(AbstractUser):
     class Meta:
         constraints = [
             models.CheckConstraint(check=models.Q(username__length__gte=4), name="min_username_length"),
-            models.UniqueConstraint(fields=['cid', 'app_name'], name='unique_app_name'),
         ]
         ordering = ['-date_joined']
 

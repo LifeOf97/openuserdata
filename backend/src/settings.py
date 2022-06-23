@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # My apps
-    'openuser.apps.OpenuserConfig',
+    'openuser',
+    # 'openuser.apps.OpenuserConfig',
     # Third party apps
     'rest_framework',
 ]
@@ -136,11 +137,10 @@ AUTH_USER_MODEL = 'openuser.User'
 AUTHENTICATION_BACKENDS = [
     'openuser.authentications.CustomUserBackend',
 ]
-
 # DjangoRestframework settings
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ],
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONOpenAPIRenderer',
@@ -157,14 +157,8 @@ REST_FRAMEWORK = {
 MAX_NUMBER_OF_PROFILES = 25
 
 # Celery settings
-CELERY_BROKER_URL = os.environ.get('REDIS_URL')
+CELERY_BROKER_URL = os.environ.get('RABBITMQ_URL')
 CELERY_TIMEZONE = 'Africa/Lagos'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = None
-# CELERY_BROKER_POOL_LIMIT = 1
-# CELERY_BROKER_HEARTBEAT = None
-# CELERY_BROKER_CONNECTION_TIMEOUT = 30
-# CELERY_EVENT_QUEUE_EXPIRES = 60
-# CELERY_WORKER_PREFETCH_MULTIPLIER = 1
-# CELERY_WORKER_CONCURRENCY = 50

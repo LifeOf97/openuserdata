@@ -12,7 +12,7 @@ class CreatorsOpenUserDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'app_name', 'uid', 'username', 'email',
+            'app_name', 'uid', 'cid', 'username', 'email',
             'first_name', 'last_name', 'other_name',
             'mugshot', 'gender', 'dob', 'about'
         )
@@ -25,8 +25,8 @@ class CreatorsOpenUserDataSerializer(serializers.ModelSerializer):
         ]
         extra_kwargs = {
             'app_name': {'required': True},
-            'password': {'write-only': True},
-            'uid': {'read-only': True}
+            'password': {'write_only': True},
+            'uid': {'read_only': True}
         }
 
     def to_internal_value(self, data):

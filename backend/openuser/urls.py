@@ -4,7 +4,6 @@ from . import apis
 app_name = 'v1'
 
 urlpatterns = [
-
     # Creators openuserdata urls endpoint with full capabilities
     path(
         '<str:cid>/<str:app_name>/users/new/',
