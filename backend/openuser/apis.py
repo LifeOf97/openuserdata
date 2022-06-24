@@ -17,6 +17,14 @@ class OpenUserDataApiViewset(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = serializers.OpenUserDataserializer
 
+    def list(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True, context={'request': request})
+        return Response(data={'data': serializer.data}, status=status.HTTP_200_OK)
+
+    def retrieve(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_object(), context={'request': request})
+        return Response(data={'data': serializer.data}, status=status.HTTP_200_OK)
+
 
 class CreatorsOpenuserdataApiViewset(viewsets.GenericViewSet):
     lookup_field = 'username'
@@ -27,7 +35,7 @@ class CreatorsOpenuserdataApiViewset(viewsets.GenericViewSet):
         queryset = super().get_queryset()
         return queryset.filter(cid=self.kwargs['cid'], app_name=self.kwargs['app_name'])
 
-    def create(self, request, cid=None, app_name=None):
+    def create(self, request, cid=None, app_name=None, **kwargs):
         """
         Creates a new user profile in the current app instance.
         Returns the newly created users details.
@@ -46,21 +54,21 @@ class CreatorsOpenuserdataApiViewset(viewsets.GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    def list(self, request, cid=None, app_name=None):
+    def list(self, request, cid=None, app_name=None, **kwargs):
         """
         Returns a list of all users belongint to the current app instance
         """
         serializer = self.get_serializer(self.get_queryset(), many=True, context={'request': request})
         return Response(data={'data': serializer.data}, status=status.HTTP_200_OK)
 
-    def retrieve(self, request, cid=None, app_name=None, username=None):
+    def retrieve(self, request, cid=None, app_name=None, username=None, **kwargs):
         """
         Returns the details of the requested user in the current app instance.
         """
         serializer = self.get_serializer(self.get_object(), context={'request': request})
         return Response(data={'data': serializer.data}, status=status.HTTP_200_OK)
 
-    def update(self, request, cid=None, app_name=None, username=None):
+    def update(self, request, cid=None, app_name=None, username=None, **kwargs):
         """
         Updates a user details in the current app instance.
         Returns the updated users detail.
@@ -75,7 +83,7 @@ class CreatorsOpenuserdataApiViewset(viewsets.GenericViewSet):
             return Response(data={'data': serializer.data}, status=status.HTTP_202_ACCEPTED)
         return Response(data=serializer.error, status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self, request, cid=None, app_name=None, username=None):
+    def destroy(self, request, cid=None, app_name=None, username=None, **kwargs):
         """
         Deletes the currently logged in user from your app instance permanently.
         Returns deleted limited users detail.

@@ -30,3 +30,4 @@ class RabbitMQProducer:
                 content_type='application/json'
             )
         )
+        self._connection.close()

@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # My apps
@@ -41,6 +42,9 @@ INSTALLED_APPS = [
     # Third party apps
     'rest_framework',
 ]
+
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -146,12 +150,11 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONOpenAPIRenderer',
         'rest_framework.renderers.JSONRenderer',
     ],
-    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
     'DEFAULT_VERSION': 'v1',
     'ALLOWED_VERSIONS': ['v1'],
     'VERSION_PARAM': 'version',
 }
-
 
 # Developer settings
 MAX_NUMBER_OF_PROFILES = 25

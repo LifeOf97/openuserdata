@@ -1,6 +1,7 @@
 from .forms import CustomAppUserCreationForm, CustomAppUserChangeForm
 from .models import User, Address, OpenuserCreator
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.sites.models import Site
 from django.contrib.auth.models import Group
 from django.contrib import admin
 
@@ -49,6 +50,7 @@ class AppUserAdmin(UserAdmin):
 
 admin_site = MyAdminSite(name='admin')
 admin_site.register(Group)
+admin_site.register(Site)
 admin_site.register(Address)
 admin_site.register(User, AppUserAdmin)
 admin_site.register(OpenuserCreator, OpenusercreatorAdmin)
