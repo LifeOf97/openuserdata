@@ -7,7 +7,7 @@ DEVELOPER = {
     'LAST_NAME': 'Mayowa',
     'OTHER_NAME': 'Ayeni',
     'ALIAS': 'realestKMA',
-    'CURRENT_LOCATION': 'Abuja, Nigeria'
+    'LOCATION': 'Abuja, Nigeria'
 }
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", 0)
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -37,10 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # My apps
-    'openuser',
-    # 'openuser.apps.OpenuserConfig',
+    'openuser.apps.OpenuserConfig',
     # Third party apps
     'rest_framework',
+    'django_filters',
 ]
 
 
@@ -116,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Lagos'
 
 USE_I18N = True
 
@@ -147,8 +147,14 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ],
     'DEFAULT_RENDERER_CLASSES': [
+        # 'rest_framework.renderers.BrowsableAPIRenderer',
         'rest_framework.renderers.JSONOpenAPIRenderer',
         'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter'
     ],
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
     'DEFAULT_VERSION': 'v1',
@@ -156,8 +162,11 @@ REST_FRAMEWORK = {
     'VERSION_PARAM': 'version',
 }
 
-# Developer settings
+# settings
 MAX_NUMBER_OF_PROFILES = 25
+
+# Django filter, search and odering settings
+FILTERS_DEFAULT_LOOKUP_EXPR = 'iexact'
 
 # Celery settings
 CELERY_BROKER_URL = os.environ.get('RABBITMQ_URL')

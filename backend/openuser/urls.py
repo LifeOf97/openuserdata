@@ -34,11 +34,11 @@ urlpatterns = [
     path(
         'api/<version>/users/',
         apis.OpenUserDataApiViewset.as_view({'get': 'list'}),
-        name='users-list'
+        name='users_list'
     ),
     path(
         'api/<version>/users/<str:username>/',
         apis.OpenUserDataApiViewset.as_view({'get': 'retrieve'}),
-        name='users-details'
+        name='users_details'
     ),
 ]

@@ -34,7 +34,7 @@ class AppUserAdmin(UserAdmin):
     )
 
     fieldsets = (
-        ("User Details", {"fields": ("cid", "app_name")}),
+        ("User Details", {"fields": ("cid", "app_name",  "aid")}),
         ("Identification", {"fields": ("id", "uid", "username", "email", "password"), }),
         ("Bio", {"fields": ("first_name", "last_name", "other_name", "dob", "gender", "mugshot", "about"), }),
         ("Status", {"fields": ("is_active", "is_staff", "is_superuser"), }),
@@ -42,7 +42,7 @@ class AppUserAdmin(UserAdmin):
         ("Important Dates", {"fields": ("date_joined", "last_login"), }),
     )
 
-    readonly_fields = ('id', 'uid', 'cid', 'password', 'date_joined', 'last_login')
+    readonly_fields = ('id', 'uid', 'cid', 'aid', 'password', 'date_joined', 'last_login')
     ordering = ('-date_joined',)
     radio_fields = {"gender": admin.HORIZONTAL}
     inlines = [AddressAdmin, ]

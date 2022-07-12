@@ -75,6 +75,7 @@ class User(AbstractUser):
     id = models.BigAutoField(_("ID"), unique=True, primary_key=True, editable=False, help_text=_("User database ID"))
     uid = models.CharField(_("UID"), max_length=15, unique=True, default=get_random_int, help_text=_("User Unique ID"))
     cid = models.CharField(_("CID"), max_length=15, blank=True, null=True, help_text=_("The creators ID"))
+    aid = models.SlugField(_("App ID"), blank=True, null=True, max_length=255, help_text=_("App unique ID"))
     app_name = models.CharField(
         _("App Name"), max_length=20, blank=False, null=False,
         validators=[
@@ -133,10 +134,10 @@ class User(AbstractUser):
     REQUIRED_FIELDS: List[str] = ['email', 'app_name']
 
     class Meta:
+        ordering = ['-date_joined']
         constraints = [
             models.CheckConstraint(check=models.Q(username__length__gte=4), name="min_username_length"),
         ]
-        ordering = ['-date_joined']
 
     def save(self, *args, **kwargs):
         self.username = self.username.replace(' ', '_').lower()

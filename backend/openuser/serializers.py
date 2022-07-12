@@ -1,5 +1,5 @@
-from rest_framework.validators import UniqueTogetherValidator
-from django.utils.translation import gettext_lazy as _
+# from rest_framework.validators import UniqueTogetherValidator
+# from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 # from . import models
@@ -12,17 +12,10 @@ class CreatorsOpenUserDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'app_name', 'uid', 'cid', 'username', 'email',
+            'app_name', 'uid', 'cid', 'aid', 'username', 'email',
             'first_name', 'last_name', 'other_name',
-            'mugshot', 'gender', 'dob', 'about'
+            'mugshot', 'gender', 'dob', 'about', "password"
         )
-        validators = [
-            UniqueTogetherValidator(
-                queryset=User.objects.all(),
-                fields=['cid', 'app_name'],
-                message=_('You already have an app with that name.')
-            )
-        ]
         extra_kwargs = {
             'app_name': {'required': True},
             'password': {'write_only': True},

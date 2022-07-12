@@ -1,3 +1,4 @@
+# This rabbitmq producer is currently not in use
 from pika.exchange_type import ExchangeType
 import pika
 import json
@@ -21,7 +22,7 @@ class RabbitMQProducer:
             durable=True
         )
 
-    def publish_update_openuserapp(self, data, routing_key='update_openuserapp'):
+    def publish_activate_openuserapp(self, data, routing_key='activate_openuserapp'):
         self._channel.basic_publish(
             exchange=self.EXCHANGE_NAME,
             routing_key=str(routing_key),

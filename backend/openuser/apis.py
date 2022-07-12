@@ -1,9 +1,11 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from django.utils.translation import gettext_lazy as _
-from rest_framework import status, viewsets
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
+from rest_framework import status, viewsets
 from django.conf import settings
 from . import serializers
+from . import filters
 
 # Custom user model
 User = get_user_model()
@@ -16,13 +18,20 @@ class OpenUserDataApiViewset(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'username'
     queryset = User.objects.all()
     serializer_class = serializers.OpenUserDataserializer
+    filterset_class = filters.UserFilter
+    search_fields = ['=username', '=first_name', '=last_name', '=other_name']
+    ordering_fields = ['username', 'dob']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(is_staff=False)
 
     def list(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.get_queryset(), many=True, context={'request': request})
+        serializer = self.get_serializer(self.filter_queryset(self.get_queryset()), many=True, context={'request': request})
         return Response(data={'data': serializer.data}, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.get_object(), context={'request': request})
+        serializer = self.get_serializer(self.filter_queryset(self.get_object()), context={'request': request})
         return Response(data={'data': serializer.data}, status=status.HTTP_200_OK)
 
 
@@ -33,7 +42,7 @@ class CreatorsOpenuserdataApiViewset(viewsets.GenericViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(cid=self.kwargs['cid'], app_name=self.kwargs['app_name'])
+        return queryset.filter(cid=self.kwargs['cid'], app_name=self.kwargs['app_name'], is_staff=False)
 
     def create(self, request, cid=None, app_name=None, **kwargs):
         """
@@ -50,7 +59,7 @@ class CreatorsOpenuserdataApiViewset(viewsets.GenericViewSet):
             return Response(data=serializer.error, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(
-            data={'error': _('You have reached your Open users limit')},
+            data={'error': _('You have reached your open users limit')},
             status=status.HTTP_400_BAD_REQUEST
         )
 

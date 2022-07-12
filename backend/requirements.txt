@@ -11,6 +11,7 @@ click-repl==0.2.0
 coverage==6.4.1
 Deprecated==1.2.13
 Django==4.0.5
+django-filter==22.1
 djangorestframework==3.13.1
 Faker==13.12.1
 flake8==4.0.1
