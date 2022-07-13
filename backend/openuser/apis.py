@@ -26,19 +26,27 @@ class OpenUserDataApiViewset(viewsets.ReadOnlyModelViewSet):
         queryset = super().get_queryset()
         return queryset.filter(is_staff=False)
 
-    def list(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.filter_queryset(self.get_queryset()), many=True, context={'request': request})
-        return Response(data={'data': serializer.data}, status=status.HTTP_200_OK)
+    # def paginate_queryset(self):
+    #     queryset = self.get_queryset()
+    #     filtered_queryset = self.filter_queryset(queryset)
+    #     return super().paginate_queryset(filtered_queryset)
 
-    def retrieve(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.filter_queryset(self.get_object()), context={'request': request})
-        return Response(data={'data': serializer.data}, status=status.HTTP_200_OK)
+    def list(self, request, *args, **kwargs):
+        # serializer = self.get_serializer(self.paginate_queryset(), many=True, context={'request': request})
+        return Response(data={'data': self.get_serializer}, status=status.HTTP_200_OK)
+
+    # def retrieve(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer(self.paginate_queryset(), context={'request': request})
+    #     return Response(data={'data': serializer.data}, status=status.HTTP_200_OK)
 
 
 class CreatorsOpenuserdataApiViewset(viewsets.GenericViewSet):
     lookup_field = 'username'
     queryset = User.objects.all()
     serializer_class = serializers.CreatorsOpenUserDataSerializer
+    filterset_class = filters.UserFilter
+    search_fields = ['=username', '=first_name', '=last_name', '=other_name']
+    ordering_fields = ['username', 'dob']
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -67,14 +75,14 @@ class CreatorsOpenuserdataApiViewset(viewsets.GenericViewSet):
         """
         Returns a list of all users belongint to the current app instance
         """
-        serializer = self.get_serializer(self.get_queryset(), many=True, context={'request': request})
+        serializer = self.get_serializer(self.filter_queryset(self.get_queryset()), many=True, context={'request': request})
         return Response(data={'data': serializer.data}, status=status.HTTP_200_OK)
 
     def retrieve(self, request, cid=None, app_name=None, username=None, **kwargs):
         """
         Returns the details of the requested user in the current app instance.
         """
-        serializer = self.get_serializer(self.get_object(), context={'request': request})
+        serializer = self.get_serializer(self.filter_queryset(self.get_object()), context={'request': request})
         return Response(data={'data': serializer.data}, status=status.HTTP_200_OK)
 
     def update(self, request, cid=None, app_name=None, username=None, **kwargs):
