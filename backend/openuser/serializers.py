@@ -17,7 +17,7 @@ class CreatorsOpenUserDataSerializer(serializers.ModelSerializer):
             'mugshot', 'gender', 'dob', 'about', "password"
         )
         extra_kwargs = {
-            'app_name': {'required': True},
+            'app_name': {'read_only': True},
             'password': {'write_only': True},
             'uid': {'read_only': True}
         }
@@ -58,3 +58,11 @@ class OpenUserDataserializer(serializers.ModelSerializer):
             'first_name', 'last_name', 'other_name',
             'mugshot', 'gender', 'dob', 'about'
         )
+
+
+class LoginSessionSerializer(serializers.Serializer):
+    """
+    Login serializer to facilitate the session authentication
+    """
+    username = serializers.CharField()
+    password = serializers.CharField()

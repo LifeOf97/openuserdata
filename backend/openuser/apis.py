@@ -1,12 +1,13 @@
-from django_filters.rest_framework import DjangoFilterBackend
+from django.contrib.auth import authenticate, login, logout
 from django.utils.translation import gettext_lazy as _
+from rest_framework import status, viewsets, views
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
-from rest_framework import status, viewsets
+from rest_framework import permissions
 from django.conf import settings
 from . import serializers
 from . import filters
-
 # Custom user model
 User = get_user_model()
 
@@ -26,21 +27,20 @@ class OpenUserDataApiViewset(viewsets.ReadOnlyModelViewSet):
         queryset = super().get_queryset()
         return queryset.filter(is_staff=False)
 
-    # def paginate_queryset(self):
-    #     queryset = self.get_queryset()
-    #     filtered_queryset = self.filter_queryset(queryset)
-    #     return super().paginate_queryset(filtered_queryset)
-
     def list(self, request, *args, **kwargs):
-        # serializer = self.get_serializer(self.paginate_queryset(), many=True, context={'request': request})
-        return Response(data={'data': self.get_serializer}, status=status.HTTP_200_OK)
+        """
+        Returns a list of users.
+        """
+        return super().list(request, *args, **kwargs)
 
-    # def retrieve(self, request, *args, **kwargs):
-    #     serializer = self.get_serializer(self.paginate_queryset(), context={'request': request})
-    #     return Response(data={'data': serializer.data}, status=status.HTTP_200_OK)
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Returns an instance of a user.
+        """
+        return super().retrieve(request, *args, **kwargs)
 
 
-class CreatorsOpenuserdataApiViewset(viewsets.GenericViewSet):
+class CreatorsOpenuserdataApiViewset(viewsets.ModelViewSet):
     lookup_field = 'username'
     queryset = User.objects.all()
     serializer_class = serializers.CreatorsOpenUserDataSerializer
@@ -48,9 +48,28 @@ class CreatorsOpenuserdataApiViewset(viewsets.GenericViewSet):
     search_fields = ['=username', '=first_name', '=last_name', '=other_name']
     ordering_fields = ['username', 'dob']
 
+    def get_permissions(self, *args, **kwargs):
+        if self.action in ['create', 'list', 'retrieve']:
+            permission_classes = [permissions.AllowAny, ]
+        else:
+            permission_classes = [permissions.IsAuthenticated, ]
+        return [perm() for perm in permission_classes]
+
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(cid=self.kwargs['cid'], app_name=self.kwargs['app_name'], is_staff=False)
+
+    def get_object(self, *args, **kwargs):
+        queryset = self.get_queryset()
+        print(self.request.path)
+
+        if 'app/i/' in self.request.path:
+            obj = get_object_or_404(queryset, username=self.request.user.username)
+        else:
+            obj = get_object_or_404(queryset, username=self.kwargs['username'])
+
+        self.check_object_permissions(self.request, obj)
+        return obj
 
     def create(self, request, cid=None, app_name=None, **kwargs):
         """
@@ -59,36 +78,41 @@ class CreatorsOpenuserdataApiViewset(viewsets.GenericViewSet):
         """
         serializer = self.get_serializer(data=request.data, context={'request': request})
 
+        # get the app id
+        app_id = User.objects.filter(cid=cid, app_name=app_name)[0].aid
+
         # make sure the creator making this request has not exceeded their users limit
-        if self.get_queryset.count() < settings.MAX_NUMBER_OF_PROFILES:
+        if self.get_queryset().count() < settings.MAX_NUMBER_OF_PROFILES:
             if serializer.is_valid():
-                serializer.save()
-                return Response(data={'data': serializer.data}, status=status.HTTP_201_CREATED)
-            return Response(data=serializer.error, status=status.HTTP_400_BAD_REQUEST)
+                serializer.save(app_name=app_name, cid=cid, aid=app_id)
+                return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(
-            data={'error': _('You have reached your open users limit')},
+            data={'error': _('You have reached your open users limit (25)')},
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    def list(self, request, cid=None, app_name=None, **kwargs):
+    def list(self, request, *args, **kwargs):
         """
-        Returns a list of all users belongint to the current app instance
+        Returns a list of users.
         """
-        serializer = self.get_serializer(self.filter_queryset(self.get_queryset()), many=True, context={'request': request})
-        return Response(data={'data': serializer.data}, status=status.HTTP_200_OK)
+        return super().list(request, *args, **kwargs)
 
-    def retrieve(self, request, cid=None, app_name=None, username=None, **kwargs):
+    def retrieve(self, request, username=None, *args, **kwargs):
         """
-        Returns the details of the requested user in the current app instance.
+        Returns an instance of a user.
+
+        Append to URL syntax: username
         """
-        serializer = self.get_serializer(self.filter_queryset(self.get_object()), context={'request': request})
-        return Response(data={'data': serializer.data}, status=status.HTTP_200_OK)
+        return super().retrieve(request, *args, **kwargs)
 
     def update(self, request, cid=None, app_name=None, username=None, **kwargs):
         """
-        Updates a user details in the current app instance.
+        Updates user details in the current app instance.
         Returns the updated users detail.
+
+        Append to URL syntax: creators_id/app_name/username
         """
         serializer = self.get_serializer(
             instance=self.get_object(), data=request.data,
@@ -96,17 +120,63 @@ class CreatorsOpenuserdataApiViewset(viewsets.GenericViewSet):
         )
 
         if serializer.is_valid():
-            serializer.save()
-            return Response(data={'data': serializer.data}, status=status.HTTP_202_ACCEPTED)
-        return Response(data=serializer.error, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save(app_name=app_name, cid=cid)
+            return Response(data=serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, cid=None, app_name=None, username=None, **kwargs):
         """
         Deletes the currently logged in user from your app instance permanently.
         Returns deleted limited users detail.
         """
-        openuser = self.get_object()
-        app_name, username, uid = openuser.app_name, openuser.username, openuser.uid
-        data = {'uid': uid, 'username': username, 'app_name': app_name, 'detail': "Deleted successfuly"}
-        openuser.delete()
-        return Response(data={'data': data}, status=status.HTTP_204_NO_CONTENT)
+        if self.get_queryset().count() > 2:
+            user = self.get_object()
+            app_name, username, uid = user.app_name, user.username, user.uid
+            data = {'uid': uid, 'username': username, 'app_name': app_name, 'detail': "Deleted successfuly"}
+            user.delete()
+            return Response(data=data, status=status.HTTP_204_NO_CONTENT)
+
+        return Response(
+            data={'error': 'Every app instance must have atleast 2 active users'},
+            status=status.HTTP_403_FORBIDDEN
+        )
+
+
+class LoginSessionApiView(viewsets.GenericViewSet):
+    authentication_classes = []
+    permission_classes = [permissions.AllowAny, ]
+    serializer_class = serializers.LoginSessionSerializer
+
+    def post(self, request, *args, **kwargs):
+        """
+        Accepts the following post parameters: username/email and password, to
+        login a user via session.
+        """
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+            user = authenticate(
+                request,
+                username=serializer.validated_data['username'],
+                password=serializer.validated_data['password']
+            )
+
+            if user is not None:
+                login(request, user)
+                response = Response(data={"detail": _("Logged in successfully")}, status=status.HTTP_200_OK)
+                return response
+
+            return Response(data={"detail": _("wrong username/email or password")}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LogoutSessionApiView(views.APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
+    # authentication_classes = [authentication.SessionAuthentication]
+
+    def post(self, request, *args, **kwargs):
+        """
+        Logs out a session authenticated user.
+        """
+        logout(request)
+        return Response(data={"detail": _("Logged out successfully")}, status=status.HTTP_200_OK)

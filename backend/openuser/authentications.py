@@ -10,7 +10,7 @@ User = get_user_model()
 class CustomUserBackend(ModelBackend):
     """
     Custom app user authentication backend to provide for username/email and password authentication.
-    A case insensitive search is used for usernanme/email field.
+    A case insensitive search is used for username/email field.
     """
     def authenticate(self, request, username=None, password=None):
         try:

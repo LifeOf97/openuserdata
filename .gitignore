@@ -7,3 +7,4 @@ backend/email
 backend/.coverage
 backend/htmlcov
 backend/db.sqlite*
+backend/*.env

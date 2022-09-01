@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+from datetime import timedelta
 from pathlib import Path
 import os
 
@@ -13,6 +15,8 @@ DEVELOPER = {
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# load env file
+load_dotenv(dotenv_path=F"{BASE_DIR}/.env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -40,6 +44,7 @@ INSTALLED_APPS = [
     'openuser.apps.OpenuserConfig',
     # Third party apps
     'rest_framework',
+    'rest_framework_simplejwt',
     'django_filters',
 ]
 
@@ -82,7 +87,7 @@ WSGI_APPLICATION = 'src.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': os.environ.get('DB_ENGINE'),
         'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASS'),
@@ -141,8 +146,13 @@ AUTH_USER_MODEL = 'openuser.User'
 AUTHENTICATION_BACKENDS = [
     'openuser.authentications.CustomUserBackend',
 ]
+
 # DjangoRestframework settings
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ],
@@ -158,7 +168,7 @@ REST_FRAMEWORK = {
     ],
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 5,
     "SEARCH_PARAM": 'q',
     'ORDERING_PARAM': 'order',
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
@@ -174,8 +184,43 @@ MAX_NUMBER_OF_PROFILES = 25
 FILTERS_DEFAULT_LOOKUP_EXPR = 'iexact'
 
 # Celery settings
+# CELERY_BROKER_URL = os.environ.get('REDIS_URL')
 CELERY_BROKER_URL = os.environ.get('RABBITMQ_URL')
 CELERY_TIMEZONE = 'Africa/Lagos'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = None
+
+
+# Simplejwt settings
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=12),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
+    'UPDATE_LAST_LOGIN': True,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'uid',
+    'USER_ID_CLAIM': 'user_uid',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(hours=12),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
