@@ -1,7 +1,7 @@
 # This action assumes that pytest, pytest-django and other pytest-** dependencies required to test the app is in the requirements.txt file.
 # it also makes use of postgresql container service.
 
-name: CI Test
+name: CI Test (pytest)
 
 
 on:
