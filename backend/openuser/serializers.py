@@ -25,6 +25,8 @@ class CreatorsOpenUserDataSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         if data.get('username'):
             data['username'] = data['username'].replace(' ', '_').lower()
+        if data.get('gender'):
+            data['gender'] = str(data['gender']).capitalize()
         return super().to_internal_value(data)
 
     def create(self, validated_data):

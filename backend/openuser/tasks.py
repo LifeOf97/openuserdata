@@ -70,7 +70,12 @@ def new_openuserapp(data):
         openuser.set_password(data['profile_password'])
         openuser.save()
 
-    return {'App name': data['name'], 'status': F'{data["profiles"]} profiles created successfully'}
+    return {
+        'Creator id': data['uid'],
+        'App name': data['name'],
+        'App id': data['id'],
+        'Details': F'{data["profiles"]} profiles created successfully'
+    }
 
 
 @app.task
@@ -119,7 +124,11 @@ def update_openuserapp(data):
             new_openuser.set_password(data['profile_password'])
             new_openuser.save()
 
-        return {'Creator': data['uid'], "App ID": data['id'], 'Detail': F'Created {profiles} more openuser profiles'}
+        return {
+            'Creator id': data['uid'],
+            "App id": data['id'],
+            'Detail': F'Created {profiles} more openuser profiles'
+        }
 
     if int(new_profiles) < current_openuser.count():
         # if the number of new profiles is less than the current profiles,
@@ -129,10 +138,18 @@ def update_openuserapp(data):
 
         for _ in current_openuser[:profiles]:
             _.delete()
-        return {'Creator': data['uid'], "App ID": data['id'], 'Detail': F'Deleted {profiles} openusers profile'}
+        return {
+            'Creator id': data['uid'],
+            "App id": data['id'],
+            'Detail': F'Deleted {profiles} openusers profile'
+        }
 
     else:
-        return {'Creator': data['uid'], "App ID": data['id'], 'Status': 'Error no openusers found'}
+        return {
+            'Creator id': data['uid'],
+            "App id": data['id'],
+            'Detail': 'Error => No openusers found'
+        }
 
 
 @app.task
@@ -148,14 +165,14 @@ def delete_openuserapp(data):
     return {
         'Creator id': data['uid'],
         'App id': data['id'],
-        'status': F'{profiles} Deleted successfully'
+        'Detail': F'{profiles} Deleted successfully'
     }
 
 
 # @app.task
-# def activate_creators_openuserapp(data):
+# def new_openuserapp_user(data):
 #     """
 #     Celery task that executes a method to publish an update message to our
-#     message broker concerning the newly created openuserapp.
+#     message broker concerning the newly created openuserapp user.
 #     """
-#     RabbitMQProducer().publish_activate_openuserapp(data)
+#     RabbitMQProducer().publish_message(data=data, routing_key='new_user')

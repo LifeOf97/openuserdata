@@ -194,7 +194,7 @@ class OpenuserCreator(models.Model):
         help_text=_("Openuser Creator Unique ID")
     )
     username = models.CharField(
-        _("Username"), max_length=255, blank=True, null=True,
+        _("Username"), max_length=15, blank=True, null=True,
         help_text=_("Openuser Creator username")
     )
 

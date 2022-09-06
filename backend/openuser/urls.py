@@ -45,7 +45,7 @@ urlpatterns = [
     path(
         'api/<version>/users/<str:username>/',
         apis.OpenUserDataApiViewset.as_view({'get': 'retrieve'}),
-        name='users_details_basic'
+        name='users_detail_basic'
     ),
 
     # user authentication urls endpoint
@@ -57,12 +57,12 @@ urlpatterns = [
     path(
         "api/<version>/auth/verify/token/",
         TokenVerifyView.as_view(),
-        name="token_verify"
+        name="login_token_verify"
     ),
     path(
         "api/<version>/auth/refresh/token/",
         TokenRefreshView.as_view(),
-        name="token_refresh"
+        name="login_token_refresh"
     ),
     path(
         "api/<version>/auth/login/session/",
@@ -72,6 +72,6 @@ urlpatterns = [
     path(
         "api/<version>/auth/logout/session/",
         apis.LogoutSessionApiView.as_view(),
-        name="login_via_session"
+        name="logout_via_session"
     ),
 ]

@@ -8,6 +8,8 @@ from rest_framework import permissions
 from django.conf import settings
 from . import serializers
 from . import filters
+
+
 # Custom user model
 User = get_user_model()
 
@@ -22,6 +24,7 @@ class OpenUserDataApiViewset(viewsets.ReadOnlyModelViewSet):
     filterset_class = filters.UserFilter
     search_fields = ['=username', '=first_name', '=last_name', '=other_name']
     ordering_fields = ['username', 'dob']
+    throttle_scope = 'anon'
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -47,6 +50,7 @@ class CreatorsOpenuserdataApiViewset(viewsets.ModelViewSet):
     filterset_class = filters.UserFilter
     search_fields = ['=username', '=first_name', '=last_name', '=other_name']
     ordering_fields = ['username', 'dob']
+    throttle_scope = 'creators'
 
     def get_permissions(self, *args, **kwargs):
         if self.action in ['create', 'list', 'retrieve']:
@@ -61,7 +65,6 @@ class CreatorsOpenuserdataApiViewset(viewsets.ModelViewSet):
 
     def get_object(self, *args, **kwargs):
         queryset = self.get_queryset()
-        print(self.request.path)
 
         if 'app/i/' in self.request.path:
             obj = get_object_or_404(queryset, username=self.request.user.username)
@@ -127,19 +130,23 @@ class CreatorsOpenuserdataApiViewset(viewsets.ModelViewSet):
     def destroy(self, request, cid=None, app_name=None, username=None, **kwargs):
         """
         Deletes the currently logged in user from your app instance permanently.
-        Returns deleted limited users detail.
+        Returns deleted users detail.
         """
-        if self.get_queryset().count() > 2:
-            user = self.get_object()
-            app_name, username, uid = user.app_name, user.username, user.uid
-            data = {'uid': uid, 'username': username, 'app_name': app_name, 'detail': "Deleted successfuly"}
-            user.delete()
-            return Response(data=data, status=status.HTTP_204_NO_CONTENT)
+        if self.get_object():
+            if self.get_queryset().count() > 2:
+                user = self.get_object()
+                app_name, username, email, uid = user.app_name, user.username, user.email, user.uid
+                data = {
+                    'uid': uid, 'username': username, 'app_name': app_name,
+                    'email': email, 'detail': "Deleted successfuly"
+                }
+                user.delete()
+                return Response(data=data, status=status.HTTP_204_NO_CONTENT)
 
-        return Response(
-            data={'error': 'Every app instance must have atleast 2 active users'},
-            status=status.HTTP_403_FORBIDDEN
-        )
+            return Response(
+                data={'error': 'Cannot delete any more user, as every app instance must have atleast 2 active users'},
+                status=status.HTTP_403_FORBIDDEN
+            )
 
 
 class LoginSessionApiView(viewsets.GenericViewSet):
@@ -172,7 +179,6 @@ class LoginSessionApiView(viewsets.GenericViewSet):
 
 class LogoutSessionApiView(views.APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
-    # authentication_classes = [authentication.SessionAuthentication]
 
     def post(self, request, *args, **kwargs):
         """

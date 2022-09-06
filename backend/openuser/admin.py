@@ -44,7 +44,7 @@ class AppUserAdmin(UserAdmin):
     )
 
     readonly_fields = ('id', 'uid', 'cid', 'aid', 'password', 'date_joined', 'last_login')
-    ordering = ('-date_joined',)
+    ordering = ('cid',)
     # radio_fields = {"gender": admin.HORIZONTAL}
     # inlines = [AddressAdmin, ]
 

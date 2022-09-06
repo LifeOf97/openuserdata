@@ -22,13 +22,18 @@ class RabbitMQProducer:
             durable=True
         )
 
-    def publish_activate_openuserapp(self, data, routing_key='activate_openuserapp'):
+    def publish_message(self, data: dict, routing_key: str):
+        """
+        Method to publish messages to rabbitmq message broker exchange for consumers
+        listening for messages with the specified routing_key.
+
+        data: dict = the message to send
+        routing_key: str = the routing key to send this message with
+        """
         self._channel.basic_publish(
             exchange=self.EXCHANGE_NAME,
             routing_key=str(routing_key),
             body=json.dumps(data),
-            properties=pika.BasicProperties(
-                content_type='application/json'
-            )
+            properties=pika.BasicProperties(content_type='application/json')
         )
         self._connection.close()
