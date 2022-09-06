@@ -1,3 +1,6 @@
+[![CI Lint (flake8)](https://github.com/realestKMA/openuserdata/actions/workflows/lint.yml/badge.svg)](https://github.com/realestKMA/openuserdata/actions/workflows/lint.yml)
+[![CI Test (pytest)](https://github.com/realestKMA/openuserdata/actions/workflows/test.yml/badge.svg)](https://github.com/realestKMA/openuserdata/actions/workflows/test.yml)
+
 # Openusers
 ##### Openuser
 
