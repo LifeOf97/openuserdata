@@ -4,38 +4,6 @@ from . import apis
 
 
 urlpatterns = [
-    # Creators openuserdata urls endpoint with full capabilities
-    path(
-        '<str:cid>/<str:app_name>/api/<version>/users/',
-        apis.CreatorsOpenuserdataApiViewset.as_view({'get': 'list'}),
-        name='users_list'
-    ),
-    path(
-        '<str:cid>/<str:app_name>/api/<version>/users/add/user/',
-        apis.CreatorsOpenuserdataApiViewset.as_view({'post': 'create'}),
-        name='users_create'
-    ),
-    path(
-        '<str:cid>/<str:app_name>/api/<version>/users/<str:username>/',
-        apis.CreatorsOpenuserdataApiViewset.as_view({'get': 'retrieve'}),
-        name='users_details_username'
-    ),
-    path(
-        '<str:cid>/<str:app_name>/api/<version>/users/app/i/',
-        apis.CreatorsOpenuserdataApiViewset.as_view({'get': 'retrieve'}),
-        name='users_details_authenticated'
-    ),
-    path(
-        '<str:cid>/<str:app_name>/api/<version>/users/app/i/update/',
-        apis.CreatorsOpenuserdataApiViewset.as_view({'put': 'update', 'patch': 'update'}),
-        name='users_update_authenticated'
-    ),
-    path(
-        '<str:cid>/<str:app_name>/api/<version>/users/app/i/delete/',
-        apis.CreatorsOpenuserdataApiViewset.as_view({'delete': 'destroy'}),
-        name='users_delete_authenticated'
-    ),
-
     # openuserdata urls endpoint with limited capabilities
     path(
         'api/<version>/users/',
@@ -46,6 +14,38 @@ urlpatterns = [
         'api/<version>/users/<str:username>/',
         apis.OpenUserDataApiViewset.as_view({'get': 'retrieve'}),
         name='users_detail_basic'
+    ),
+
+    # Creators openuserdata urls endpoint with full capabilities
+    path(
+        'api/<version>/<str:cid>/<str:app_name>/users/',
+        apis.CreatorsOpenuserdataApiViewset.as_view({'get': 'list'}),
+        name='users_list'
+    ),
+    path(
+        'api/<version>/<str:cid>/<str:app_name>/users/<str:username>/',
+        apis.CreatorsOpenuserdataApiViewset.as_view({'get': 'retrieve'}),
+        name='users_details_username'
+    ),
+    path(
+        'api/<version>/<str:cid>/<str:app_name>/users/app/add/',
+        apis.CreatorsOpenuserdataApiViewset.as_view({'post': 'create'}),
+        name='users_create'
+    ),
+    path(
+        'api/<version>/<str:cid>/<str:app_name>/users/app/i/',
+        apis.CreatorsOpenuserdataApiViewset.as_view({'get': 'retrieve'}),
+        name='users_details_authenticated'
+    ),
+    path(
+        'api/<version>/<str:cid>/<str:app_name>/users/app/i/update/',
+        apis.CreatorsOpenuserdataApiViewset.as_view({'put': 'update', 'patch': 'update'}),
+        name='users_update_authenticated'
+    ),
+    path(
+        'api/<version>/<str:cid>/<str:app_name>/users/app/i/delete/',
+        apis.CreatorsOpenuserdataApiViewset.as_view({'delete': 'destroy'}),
+        name='users_delete_authenticated'
     ),
 
     # user authentication urls endpoint

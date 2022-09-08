@@ -1,11 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import get_object_or_404, get_list_or_404
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status, viewsets, views
-from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework import permissions
 from django.conf import settings
+from django.http import Http404
 from . import serializers
 from . import filters
 
@@ -61,7 +62,11 @@ class CreatorsOpenuserdataApiViewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(cid=self.kwargs['cid'], app_name=self.kwargs['app_name'], is_staff=False)
+        data = queryset.filter(cid=self.kwargs['cid'], app_name=self.kwargs['app_name'], is_staff=False)
+
+        if data.count() == 0:
+            raise Http404
+        return data
 
     def get_object(self, *args, **kwargs):
         queryset = self.get_queryset()
