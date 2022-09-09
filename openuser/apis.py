@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import get_object_or_404, get_list_or_404
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status, viewsets, views
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework import permissions
