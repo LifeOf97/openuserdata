@@ -491,3 +491,9 @@ You are to replace the word **version** with the api version you wish to utilize
       ```
 
 ## About Authentication
+
+- **Token Authentication**
+  
+  Open user data uses *JWT (JSON WEB TOKEN)* for it's token based authentication. Once you make a **POST** request with a valid username/email & password to the login via token endpoint, a refresh and access token will be sent back as response. The **access** token should then be used to authenticate further requests to endpoints that requires authentication/authorization. This **access** token should be passed in the **Authorization** request header as a Bearer token:
+
+  > Authorization="Bearer bearer-token-here"
