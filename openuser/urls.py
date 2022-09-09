@@ -55,14 +55,14 @@ urlpatterns = [
         name="login_via_token"
     ),
     path(
-        "api/<version>/auth/verify/token/",
-        TokenVerifyView.as_view(),
-        name="login_token_verify"
-    ),
-    path(
         "api/<version>/auth/refresh/token/",
         TokenRefreshView.as_view(),
         name="login_token_refresh"
+    ),
+    path(
+        "api/<version>/auth/verify/token/",
+        TokenVerifyView.as_view(),
+        name="login_token_verify"
     ),
     path(
         "api/<version>/auth/login/session/",

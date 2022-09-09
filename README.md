@@ -26,8 +26,7 @@ Welcome to *Open user data*. This is a part of the Openuser REST API service. Op
 
 
 ## URL Endpoints, Request Methods & Response
-#
-You are to replace the word *version* with the api version you wish to utilize in the url.cAs of this moment only **v1** is available.
+You are to replace the word **version** with the api version you wish to utilize in the url.cAs of this moment only **v1** is available.
 
 - URL:
   - https://openuserdata.com/
@@ -41,8 +40,8 @@ You are to replace the word *version* with the api version you wish to utilize i
     ```JSON
     {
         "count": "int",
-        "next": ""url|null"",
-        "previous": ""url|null"",
+        "next": "url|null",
+        "previous": "url|null",
         "results": ["..."]
     }
     ```
@@ -311,7 +310,7 @@ You are to replace the word *version* with the api version you wish to utilize i
 
   - **POST**: api/*version*/auth/login/token/
 
-    Authenticate a user via Token Authentication. Note, the username field can take a valid username or email address.
+    Authenticate a user via **Token Authentication**. Note, the username field can take a valid username or email address.
 
     Request Body:
 
@@ -355,7 +354,7 @@ You are to replace the word *version* with the api version you wish to utilize i
 
   - **POST**: api/*version*/auth/refresh/token/
 
-    Use the longer-lived refresh token to obtain another access token. The **refresh** token is gotten from the successful sign in via token respone.
+    Use the longer-lived refresh token to obtain another access token. The **refresh** token is gotten from the successful sign in via token response.
 
     Request Body:
 
@@ -390,8 +389,105 @@ You are to replace the word *version* with the api version you wish to utilize i
       }
       ```
   
-  
-UPDATE: Setting up filter, search and order functionality on the users backend
+  - **POST**: api/*version*/auth/verify/token/
 
-(13-07-2022) Need to update my undergraduate project.
-(20-08-2022) Back to clontinue
+    Verify the authenticity of a token.
+
+    Request Body:
+
+    ```JSON
+    {
+        "token": "string" // required
+    }
+    ```
+
+    Response:
+
+    - Success: 200
+
+      ```JSON
+      {}
+      ```
+
+    - Failure(s): 400, 401
+      
+      ```JSON
+      {
+        "token": ["This field is required."]
+      }
+      ```
+
+      ```JSON
+      {
+        "detail": "Token is invalid or expired",
+        "code": "token_not_valid"
+      }
+      ```
+  
+  - **POST**: api/*version*/auth/login/session/
+
+    Authenticate a user via **Session Authentication**. Note, the username field can take a valid username or email address.
+  
+    Request Body:
+
+    ```JSON
+    {
+        "username": "string", //required
+        "password": "string" // required
+    }
+    ```
+
+    Response: 
+
+    - Success: 200
+
+      ```JSON
+      {
+        "detail": "Logged in successfully"
+      }
+      ```
+
+    - Failure(s): 400
+
+      ```JSON
+      {
+        "detail": "wrong username/email or password"
+      }
+      ```
+
+  - **POST**: api/*version*/auth/logout/session/
+
+    Logout a user session.
+    > NOTE: You need to provide a valid **X-CSRFToken** request header on this request.
+
+    Response:
+
+    - Success: 200
+
+      ```JSON
+      {
+        "detail": "Logged out successfully"
+      }
+      ```
+
+    - Failure(s): 401, 403
+
+      ```JSON
+      {
+        "detail": "Authentication credentials were not provided."
+      }
+      ```
+
+      ```JSON
+      {
+        "detail": "CSRF Failed: CSRF token missing."
+      }
+      ```
+
+      ```JSON
+      {
+        "detail": "CSRF Failed: CSRF token from the 'X-Csrftoken' HTTP header incorrect."
+      }
+      ```
+
+## About Authentication
