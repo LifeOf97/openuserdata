@@ -15,10 +15,10 @@ Welcome to *Open user data*. This is a part of the Openuser REST API service. Op
 - Retrieve all users belonging to a creators app instance in the system.
 - Retrieve a particular user in a creators app instance via *username*.
 - Create a new user in a creators app instance. **(Creators only)**
-- Authenticate a user via [*Bearer Authentication*](). uses **JWT**
+- [Token Authentication](). uses **JWT**
 - Verify a Bearer token. **JWT**
 - Refresh a token. **JWT**
-- Authenticate a user via [*Session Authetication*]().
+- [Session Authetication]().
 - Retrieve data of an authenticated user.
 - Update data of an authenticated user.
   > NOTE: User password cannot be updated via REST API, it can only be updated via your creators dashboard. 
@@ -40,10 +40,10 @@ You are to replace the word *version* with the api version you wish to utilize i
     Response: 200
     ```JSON
     {
-        "count": int,
-        "next": url|null,
-        "previous": url|null,
-        "results": [...]
+        "count": "int",
+        "next": ""url|null"",
+        "previous": ""url|null"",
+        "results": ["..."]
     }
     ```
 
@@ -56,16 +56,16 @@ You are to replace the word *version* with the api version you wish to utilize i
      
       ```JSON
       {
-        "uid": string,
-        "username": string,
-        "email": string|null,
-        "first_name": string|null,
-        "last_name": string|null,
-        "other_name": string|null,
-        "mugshot": url|null,
-        "gender": Male|Female|Undefined,
-        "dob": string|null,
-        "about": string|null
+        "uid": "string",
+        "username": "string",
+        "email": "string|null",
+        "first_name": "string|null",
+        "last_name": "string|null",
+        "other_name": "string|null",
+        "mugshot": "url|null",
+        "gender": "Male|Female|Undefined",
+        "dob": "string|null",
+        "about": "string|null"
       }
       ```
     - Failure(s): 404
@@ -85,10 +85,10 @@ You are to replace the word *version* with the api version you wish to utilize i
 
       ```JSON
       {
-        "count": int,
-        "next": url|null,
-        "previous": url|null,
-        "results": [...]
+        "count": "int",
+        "next": "url|null",
+        "previous": "url|null",
+        "results": ["..."]
       }
       ```
     - Failure(s): 404
@@ -109,15 +109,16 @@ You are to replace the word *version* with the api version you wish to utilize i
     > NOTE: Only the username & email fields are required, the rest are optional.
     ```JSON
     {
-        "username": string,
-        "email": string|null,
-        "first_name": string|null,
-        "last_name": string|null,
-        "other_name": string|null,
-        "mugshot": string|null,
-        "gender": Male|Female|Undefined,
-        "dob": string|null,
-        "about": string|null
+        "username": "string", //required
+        "email": "string|null", //required
+        "password": "string", //required
+        "first_name": "string|null",
+        "last_name": "string|null",
+        "other_name": "string|null",
+        "mugshot": "string|null",
+        "gender": "Male|Female|Undefined",
+        "dob": "string|null",
+        "about": "string|null"
     }
     ```
     Response:
@@ -125,19 +126,19 @@ You are to replace the word *version* with the api version you wish to utilize i
     - Success: 201
       ```JSON
       {
-        "cid": string,
-        "app_name": string,
-        "uid": string,
-        "aid": uuid,
-        "username": string,
-        "email": string|null,
-        "first_name": string|null,
-        "last_name": string|null,
-        "other_name": string|null,
-        "mugshot": string|null,
-        "gender": Male|Female|Undefined,
-        "dob": string|null,
-        "about": string|null
+        "cid": "string",
+        "app_name": "string",
+        "uid": "string",
+        "aid": "uuid",
+        "username": "string",
+        "email": "string|null",
+        "first_name": "string|null",
+        "last_name": "string|null",
+        "other_name": "string|null",
+        "mugshot": "string|null",
+        "gender": "Male|Female|Undefined",
+        "dob": "string|null",
+        "about": "string|null"
       }
       ```
 
@@ -171,19 +172,19 @@ You are to replace the word *version* with the api version you wish to utilize i
     - Success: 200
       ```JSON
       {
-        "cid": string,
-        "app_name": string,
-        "uid": string,
-        "aid": uuid,
-        "username": string,
-        "email": string|null,
-        "first_name": string|null,
-        "last_name": string|null,
-        "other_name": string|null,
-        "mugshot": string|null,
-        "gender": Male|Female|Undefined,
-        "dob": string|null,
-        "about": string|null
+        "cid": "string",
+        "app_name": "string",
+        "uid": "string",
+        "aid": "uuid",
+        "username": "string",
+        "email": "string|null",
+        "first_name": "string|null",
+        "last_name": "string|null",
+        "other_name": "string|null",
+        "mugshot": "string|null",
+        "gender": "Male|Female|Undefined",
+        "dob": "string|null",
+        "about": "string|null"
       }
       ```
     
@@ -217,15 +218,15 @@ You are to replace the word *version* with the api version you wish to utilize i
     Request Body:
     ```JSON
     {
-        "username": string,
-        "email": string|null,
-        "first_name": string|null,
-        "last_name": string|null,
-        "other_name": string|null,
-        "mugshot": string|null,
-        "gender": Male|Female|Undefined,
-        "dob": string|null,
-        "about": string|null
+        "username": "string",
+        "email": "string|null",
+        "first_name": "string|null",
+        "last_name": "string|null",
+        "other_name": "string|null",
+        "mugshot": "string|null",
+        "gender": "Male|Female|Undefined",
+        "dob": "string|null",
+        "about": "string|null"
     }
     ```
 
@@ -234,19 +235,19 @@ You are to replace the word *version* with the api version you wish to utilize i
 
       ```JSON
       {
-        "cid": string,
-        "app_name": string,
-        "uid": string,
-        "aid": uuid,
-        "username": string,
-        "email": string|null,
-        "first_name": string|null,
-        "last_name": string|null,
-        "other_name": string|null,
-        "mugshot": string|null,
-        "gender": Male|Female|Undefined,
-        "dob": string|null,
-        "about": string|null
+        "cid": "string",
+        "app_name": "string",
+        "uid": "string",
+        "aid": "uuid",
+        "username": "string",
+        "email": "string|null",
+        "first_name": "string|null",
+        "last_name": "string|null",
+        "other_name": "string|null",
+        "mugshot": "string|null",
+        "gender": "Male|Female|Undefined",
+        "dob": "string|null",
+        "about": "string|null"
       }
       ```
     - Failure(s): 400
@@ -277,10 +278,10 @@ You are to replace the word *version* with the api version you wish to utilize i
 
       ```JSON
       {
-        "uid": string,
-        "username": string,
-        "app_name": string,
-        "email": strimg,
+        "uid": "string",
+        "username": "string",
+        "app_name": "string",
+        "email": "string",
         "detail": "Deleted successfuly"
       }
       ```
@@ -305,6 +306,87 @@ You are to replace the word *version* with the api version you wish to utilize i
                 "message": "Token is invalid or expired"
             }
         ]
+      }
+      ```
+
+  - **POST**: api/*version*/auth/login/token/
+
+    Authenticate a user via Token Authentication. Note, the username field can take a valid username or email address.
+
+    Request Body:
+
+    ```JSON
+    {
+        "username": "string", //required
+        "password": "string" // required
+    }
+    ```
+
+    Response:
+
+    - Success: 200
+
+      ```JSON
+      {
+        "refresh": "string",
+        "access": "string"
+      }
+      ```
+
+    - Failure(s): 401, 400
+
+      ```JSON
+      {
+        "detail": "No active account found with the given credentials"
+      }
+      ```
+
+      ```JSON
+      {
+        "username": ["This field is required."]
+      }
+      ```
+
+      ```JSON
+      {
+        "password": ["This field is required."]
+      }
+      ```
+
+  - **POST**: api/*version*/auth/refresh/token/
+
+    Use the longer-lived refresh token to obtain another access token. The **refresh** token is gotten from the successful sign in via token respone.
+
+    Request Body:
+
+    ```JSON
+    {
+        "refresh": "string" //required
+    }
+    ```
+
+    Response: 200
+
+    - Success: 200
+
+      ```JSON
+      {
+        "access": "string"
+      }
+      ```
+
+    - Failure(s): 400, 401
+
+      ```JSON
+      {
+        "refresh": ["This field is required."]
+      }
+      ```
+
+      ```JSON
+      {
+        "detail": "Token is invalid or expired",
+        "code": "token_not_valid"
       }
       ```
   
