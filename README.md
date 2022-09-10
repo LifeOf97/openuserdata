@@ -3,7 +3,7 @@
 
 
 # Open Users Data
-### Hello There,
+### Hello There.
 
 Welcome to *Open user data*. This is a part of the Openuser REST API service. Open user data provides dummy user data over [REST API](https://www.redhat.com/en/topics/api/what-is-a-rest-api). It's main purpose is to provide an API endpoint where developers can practice [CRUD](https://www.sumologic.com/glossary/crud/) operations, Authentication/Authorization, and more over REST API.
 
@@ -497,13 +497,16 @@ Open user data provides both **Session Base** & **Token Base** authentication fo
 
 Open user data uses *JWT (JSON WEB TOKEN)* for it's token based authentication. Once you make a **POST** request with a valid username/email & password to the login via token endpoint, a refresh and access token will be sent back as response. The **access** token should then be used to authenticate further requests to endpoints that requires authentication/authorization. This **access** token should be passed in the **Authorization** request header as a **Bearer** token:
 
-  > Authorization="Bearer bearer-token-here"
+```JSON
+Authorization="Bearer bearer-token-hereXYZ"
+```
 
-  Please note the following:
+Please note the following:
 
-  - The lifetime of an **access** token is 2 hours.
-  - The lifetime of an **refresh** token is 4 hours.
-  - The Authorization header keyword is **Bearer**.
+- The lifetime of an **access** token is 2 hours.
+- The lifetime of an **refresh** token is 4 hours.
+- The Authorization header keyword is **Bearer**.
+
 
 ### **Session Based Authentication**
 
@@ -515,6 +518,33 @@ Session based authentication keeps authentication details in the form of cookies
 
 Open user data provides  the following features that requires url query params.
 
+### Pagination
+Open user data includes support for customizable pagination styles. With these, you can modify how result set are split into pages. Pagination links are provided as part of the content of the response.
+
+Open user data uses the [LimitOffsetPagination](https://www.django-rest-framework.org/api-guide/pagination/#limitoffsetpagination).
+
+> Django-rest-framework: "This pagination style mirrors the syntax used when looking up multiple database records. The client includes both a "limit" and an "offset" query parameter. The limit indicates the maximum number of items to return, and is equivalent to the page_size in other styles. The offset indicates the starting position of the query in relation to the complete set of unpaginated items."
+
+Request:
+
+```JSON
+GET https://openuserdata.com/api/v1/?limit=100&offset=400
+```
+
+Response:
+
+```JSON
+{
+    "count": 10000,
+    "next": "https://openuserdata.com/api/v1/?limit=100&offset=500",
+    "previous": "https://openuserdata.com/api/v1/?limit=100&offset=300",
+    "results": ["..."]
+}
+```
+
+The default number of data retrurned is **50**, offcourse you can change this to suit your needs.
+
+
 ### Filtering
 Usually the returned data from any successful request to the backend is the whole object in the database. Sometimes, you'll want to retrieve just a subset of data from the backend. Open user data provides just what you need.
 
@@ -522,18 +552,25 @@ Usually the returned data from any successful request to the backend is the whol
 
     You can filter based on the following parameters, `username`, `first_name`, `last_name`, `other_name`, `gender`, `dob`, `dob__year`, `dob__year__gt` and `dob__year__lt`. And they can also be appended to each other using the **& ampersand** sign. Note, values are **case insensitive**.
 
-    > EXAMPLE: https://openuserdata.com/api/v1/user?username=john&dob__year_gt=2000
-
+    ```JSON
+    GET https://openuserdata.com/api/v1/user?username=john&dob__year_gt=2000
+    ```
 
   - Data Searching
 
     You can search for a specific data passing any of this values to the search param `username`, `first_name`, `last_name` and `other_name` this values should be an exact match of the user you are searching for. Note, values are **case insensitive**. Open user data uses the keyword **q** for searching.
 
-    > EXAMPLE: https://openuserdata.com/api/v1/user?q=john
-
+    ```JSON
+    GET https://openuserdata.com/api/v1/user?q=john
+    ```
 
   - Date Ordering
 
     You can specify in what order you want your returned data to be in. The only supported ordering values are. `username`, `email` and `dob`. Open user data uses the keyword **order** as the url param key to order data.
 
-    > EXAMPLE: https://openuserdata.com/api/v1/user?order=john
+    ```JSON
+    GET https://openuserdata.com/api/v1/user?order=john
+    ```
+
+
+## About Creators
