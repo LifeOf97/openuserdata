@@ -15,10 +15,10 @@ Welcome to *Open user data*. This is a part of the Openuser REST API service. Op
 - Retrieve all users belonging to a creators app instance in the system.
 - Retrieve a particular user in a creators app instance via *username*.
 - Create a new user in a creators app instance. **(Creators only)**
-- [Token Authentication](). uses **JWT**
+- [Token Base Authentication](https://www.authgear.com/post/session-vs-token-authentication). uses **JWT**
 - Verify a Bearer token. **JWT**
 - Refresh a token. **JWT**
-- [Session Authetication]().
+- [Session Base Authetication](https://www.authgear.com/post/session-vs-token-authentication).
 - Retrieve data of an authenticated user.
 - Update data of an authenticated user.
   > NOTE: User password cannot be updated via REST API, it can only be updated via your creators dashboard. 
@@ -308,7 +308,7 @@ You are to replace the word **version** with the api version you wish to utilize
       }
       ```
 
-  - **POST**: api/*version*/auth/login/token/
+  - #### **POST**: api/*version*/auth/login/token/
 
     Authenticate a user via **Token Authentication**. Note, the username field can take a valid username or email address.
 
@@ -458,7 +458,7 @@ You are to replace the word **version** with the api version you wish to utilize
   - **POST**: api/*version*/auth/logout/session/
 
     Logout a user session.
-    > NOTE: You need to provide a valid **X-CSRFToken** request header on this request.
+    > NOTE: You need to make sure you include a valid X-CSRFToken token for any "unsafe" HTTP method calls in the request header, such as **PUT**, **PATCH**, **POST** or **DELETE** requests.
 
     Response:
 
@@ -491,9 +491,49 @@ You are to replace the word **version** with the api version you wish to utilize
       ```
 
 ## About Authentication
+Open user data provides both **Session Base** & **Token Base** authentication for you to use and learn.
 
-- **Token Authentication**
-  
-  Open user data uses *JWT (JSON WEB TOKEN)* for it's token based authentication. Once you make a **POST** request with a valid username/email & password to the login via token endpoint, a refresh and access token will be sent back as response. The **access** token should then be used to authenticate further requests to endpoints that requires authentication/authorization. This **access** token should be passed in the **Authorization** request header as a Bearer token:
+### **Token Based Authentication**
+
+Open user data uses *JWT (JSON WEB TOKEN)* for it's token based authentication. Once you make a **POST** request with a valid username/email & password to the login via token endpoint, a refresh and access token will be sent back as response. The **access** token should then be used to authenticate further requests to endpoints that requires authentication/authorization. This **access** token should be passed in the **Authorization** request header as a **Bearer** token:
 
   > Authorization="Bearer bearer-token-here"
+
+  Please note the following:
+
+  - The lifetime of an **access** token is 2 hours.
+  - The lifetime of an **refresh** token is 4 hours.
+  - The Authorization header keyword is **Bearer**.
+
+### **Session Based Authentication**
+
+Session based authentication keeps authentication details in the form of cookies. Once you make a **POST** request with a valid username/email & password to the login via session endpoint, a sessionid is then added to the response cookies which is then sent back and forth on every request so the server can verify the user making the request.
+> NOTE: You need to make sure you include a valid X-CSRFToken token for any "unsafe" HTTP method calls in the request header, such as **PUT**, **PATCH**, **POST** or **DELETE** requests.
+
+
+## About URL Query parameters
+
+Open user data provides  the following features that requires url query params.
+
+### Filtering
+Usually the returned data from any successful request to the backend is the whole object in the database. Sometimes, you'll want to retrieve just a subset of data from the backend. Open user data provides just what you need.
+
+  - Data Filtering
+
+    You can filter based on the following parameters, `username`, `first_name`, `last_name`, `other_name`, `gender`, `dob`, `dob__year`, `dob__year__gt` and `dob__year__lt`. And they can also be appended to each other using the **& ampersand** sign. Note, values are **case insensitive**.
+
+    > EXAMPLE: https://openuserdata.com/api/v1/user?username=john&dob__year_gt=2000
+
+
+  - Data Searching
+
+    You can search for a specific data passing any of this values to the search param `username`, `first_name`, `last_name` and `other_name` this values should be an exact match of the user you are searching for. Note, values are **case insensitive**. Open user data uses the keyword **q** for searching.
+
+    > EXAMPLE: https://openuserdata.com/api/v1/user?q=john
+
+
+  - Date Ordering
+
+    You can specify in what order you want your returned data to be in. The only supported ordering values are. `username`, `email` and `dob`. Open user data uses the keyword **order** as the url param key to order data.
+
+    > EXAMPLE: https://openuserdata.com/api/v1/user?order=john

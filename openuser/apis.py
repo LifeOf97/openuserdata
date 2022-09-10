@@ -24,7 +24,7 @@ class OpenUserDataApiViewset(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.OpenUserDataserializer
     filterset_class = filters.UserFilter
     search_fields = ['=username', '=first_name', '=last_name', '=other_name']
-    ordering_fields = ['username', 'dob']
+    ordering_fields = ['username', 'email', 'dob']
     throttle_scope = 'anon'
 
     def get_queryset(self):
@@ -50,7 +50,7 @@ class CreatorsOpenuserdataApiViewset(viewsets.ModelViewSet):
     serializer_class = serializers.CreatorsOpenUserDataSerializer
     filterset_class = filters.UserFilter
     search_fields = ['=username', '=first_name', '=last_name', '=other_name']
-    ordering_fields = ['username', 'dob']
+    ordering_fields = ['username', 'email', 'dob']
     throttle_scope = 'creators'
 
     def get_permissions(self, *args, **kwargs):

@@ -216,7 +216,7 @@ CELERY_RESULT_BACKEND = None
 # Simplejwt settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=12),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(hours=12),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': True,
