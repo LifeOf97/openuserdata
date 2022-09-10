@@ -497,7 +497,7 @@ Open user data provides both **Session Base** & **Token Base** authentication fo
 
 Open user data uses *JWT (JSON WEB TOKEN)* for it's token based authentication. Once you make a **POST** request with a valid username/email & password to the login via token endpoint, a refresh and access token will be sent back as response. The **access** token should then be used to authenticate further requests to endpoints that requires authentication/authorization. This **access** token should be passed in the **Authorization** request header as a **Bearer** token:
 
-```JSON
+```BASH
 Authorization="Bearer bearer-token-hereXYZ"
 ```
 
@@ -527,7 +527,7 @@ Open user data uses the [LimitOffsetPagination](https://www.django-rest-framewor
 
 Request:
 
-```JSON
+```BASH
 GET https://openuserdata.com/api/v1/?limit=100&offset=400
 ```
 
@@ -552,7 +552,7 @@ Usually the returned data from any successful request to the backend is the whol
 
     You can filter based on the following parameters, `username`, `first_name`, `last_name`, `other_name`, `gender`, `dob`, `dob__year`, `dob__year__gt` and `dob__year__lt`. And they can also be appended to each other using the **& ampersand** sign. Note, values are **case insensitive**.
 
-    ```JSON
+    ```BASH
     GET https://openuserdata.com/api/v1/user?username=john&dob__year_gt=2000
     ```
 
@@ -560,7 +560,7 @@ Usually the returned data from any successful request to the backend is the whol
 
     You can search for a specific data passing any of this values to the search param `username`, `first_name`, `last_name` and `other_name` this values should be an exact match of the user you are searching for. Note, values are **case insensitive**. Open user data uses the keyword **q** for searching.
 
-    ```JSON
+    ```BASH
     GET https://openuserdata.com/api/v1/user?q=john
     ```
 
@@ -568,7 +568,7 @@ Usually the returned data from any successful request to the backend is the whol
 
     You can specify in what order you want your returned data to be in. The only supported ordering values are. `username`, `email` and `dob`. Open user data uses the keyword **order** as the url param key to order data.
 
-    ```JSON
+    ```BASH
     GET https://openuserdata.com/api/v1/user?order=john
     ```
 
