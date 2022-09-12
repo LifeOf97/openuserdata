@@ -491,14 +491,20 @@ You are to replace the word **version** with the api version you wish to utilize
       ```
 
 ## About Authentication
-Open user data provides both **Session Base** & **Token Base** authentication for you to use and learn.
+Open user data provides both **Session Base** & **Token Base** authentication for you to use and learn. Any **user data** can be used to authenticate by users of open user data, however to update or delete an account you need to make request to the appropriate endpoint of the creator who owns this user you are authenticated as.
 
 ### **Token Based Authentication**
 
-Open user data uses *JWT (JSON WEB TOKEN)* for it's token based authentication. Once you make a **POST** request with a valid username/email & password to the login via token endpoint, a refresh and access token will be sent back as response. The **access** token should then be used to authenticate further requests to endpoints that requires authentication/authorization. This **access** token should be passed in the **Authorization** request header as a **Bearer** token:
+Open user data uses *JWT (JSON WEB TOKEN)* for it's token based authentication. Once you make a **POST** request with a valid username/email & password to this endpoint 
 
 ```BASH
-Authorization="Bearer bearer-token-hereXYZ"
+POST: https://openuserdata.com/api/v1/auth/login/token/
+```
+
+a refresh and access token will be sent back as response. The **access** token should then be used to authenticate further requests to endpoints that requires authentication/authorization. This **access** token should be passed in the **Authorization** request header as a **Bearer** token:
+
+```BASH
+Authorization="Bearer access-token-hereXYZ"
 ```
 
 Please note the following:
@@ -510,8 +516,15 @@ Please note the following:
 
 ### **Session Based Authentication**
 
-Session based authentication keeps authentication details in the form of cookies. Once you make a **POST** request with a valid username/email & password to the login via session endpoint, a sessionid is then added to the response cookies which is then sent back and forth on every request so the server can verify the user making the request.
-> NOTE: You need to make sure you include a valid X-CSRFToken token for any "unsafe" HTTP method calls in the request header, such as **PUT**, **PATCH**, **POST** or **DELETE** requests.
+Session based authentication keeps authentication details in the form of cookies. Once you make a **POST** request with a valid username/email & password to this endpoint
+
+```BASH
+POST: https://openuserdata.com/api/v1/auth/login/session/
+```
+
+a sessionid is then added to the response cookies which is then sent back and forth on every request so the server can verify the user making the request.
+
+> NOTE: You need to make sure you include a valid X-CSRFToken token for any "unsafe" HTTP method calls in the request header, such as **PUT**, **PATCH**, **POST** or **DELETE** requests. The csrftoken is found in the cookies.
 
 
 ## About URL Query parameters
@@ -574,3 +587,32 @@ Usually the returned data from any successful request to the backend is the whol
 
 
 ## About Creators
+
+Who are creators in Open user data? creators are users of open user data who have created an account in open user creators. Creators can create applications to hold a maximum number of users. This users can then be retrieved by any other user when making a request to the public users endpoint.
+
+```BASH
+GET https://openuserdata.com/api/v1/users/
+GET https://openuserdata.com/api/v1/users/<username>/
+```
+
+Creators have application instances which users are created under that application. Creators have their specific enpoints to make request to, this endpoints can be shared with others.
+
+```BASH
+GET https://openuserdata.com/api/v1/<cid>/<app_name>/users/
+GET https://openuserdata.com/api/v1/<cid>/<app_name>/users/<username>/
+GET https://openuserdata.com/api/v1/<cid>/<app_name>/users/app/i/
+POST https://openuserdata.com/api/v1/<cid>/<app_name>/users/app/add/
+PUT https://openuserdata.com/api/v1/<cid>/<app_name>/users/app/i/update/
+PATCH https://openuserdata.com/api/v1/<cid>/<app_name>/users/app/i/update/
+DELETE https://openuserdata.com/api/v1/<cid>/<app_name>/users/app/i/delete/
+```
+
+But remember certain endpoints requires authentication.
+
+As a creator:
+
+- You get your own specific endpoint.
+- You can increase & decrease bulk user at once.
+- You can update the password of all users in an application.
+  > NOTE: All users in an application must share the same password.
+- 
