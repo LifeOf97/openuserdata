@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'django_filters',
+    'drf_spectacular',
 ]
 
 
@@ -171,9 +172,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ],
     'DEFAULT_RENDERER_CLASSES': [
-        # 'rest_framework.renderers.BrowsableAPIRenderer',
         'rest_framework.renderers.JSONOpenAPIRenderer',
         'rest_framework.renderers.JSONRenderer',
+        # 'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
@@ -189,13 +190,14 @@ REST_FRAMEWORK = {
     },
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 50,
     "SEARCH_PARAM": 'q',
     'ORDERING_PARAM': 'order',
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
     'DEFAULT_VERSION': 'v1',
     'ALLOWED_VERSIONS': ['v1'],
     'VERSION_PARAM': 'version',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 # settings
@@ -244,4 +246,15 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(hours=12),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+# Django spectacular settings
+SPECTACULAR_SETTINGS = {
+    'TITLE': "Open user data API",
+    'DESCRIPTION': "Open user data provides dummy user data over REST API. It's main purpose \
+is to provide an API endpoint where developers can practice CRUD operations, \
+Authentication/Authorization, and more over REST API.",
+    'VERSION': "1.0.0",
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
 }

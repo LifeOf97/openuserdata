@@ -9,10 +9,10 @@ class UserFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = User
         fields = {
-            'username': ['exact', 'iexact'],
-            'first_name': ['exact', 'iexact'],
-            'last_name': ['exact', 'iexact'],
-            'other_name': ['exact', 'iexact'],
-            'gender': ['exact', 'iexact', ],
-            'dob': ['exact', 'year', 'year__gt', 'year__lt']
+            'username': ['iexact'],
+            'first_name': ['iexact'],
+            'last_name': ['iexact'],
+            'other_name': ['iexact'],
+            'gender': ['iexact', ],
+            'dob': ['year', 'year__gt', 'year__lt']
         }
