@@ -32,7 +32,7 @@ You are to replace the word **version** with the api version you wish to utilize
   - https://openuserdata.com/
 - Methods & Endpoints:
 
-  - **GET**: api/*version*/users/
+  - **GET**: api/:version/users/
     
     Retrieve all users in the system.
 
@@ -46,7 +46,7 @@ You are to replace the word **version** with the api version you wish to utilize
     }
     ```
 
-  - **GET**: api/*version*/users/*username*/
+  - **GET**: api/:version/users/:username/
 
     Get a specific user by their username. The username should be a valid user username provided by you.
 
@@ -75,7 +75,7 @@ You are to replace the word **version** with the api version you wish to utilize
       }
       ```
 
-  - **GET**: api/*version*/*cid*/*app_name*/users/
+  - **GET**: api/:version/:cid/:app_name/users/
 
     Retrieve all users belonging to a particular creator's app instance. **cid** should be your creator id, **app_name** should be the app name you want to query. Make sure the app name belongs to the creator.
 
@@ -97,7 +97,7 @@ You are to replace the word **version** with the api version you wish to utilize
         "detail": "Not found."
       }
       ```
-  - **POST**: api/*version*/*cid*/*app_name*/users/app/add/
+  - **POST**: api/:version/:cid/:app_name/users/app/add/
 
     Create a new user in a creator's app. Please note the following while creating a new user.
     - the username and email fields should be unique per user as this fields are used to authenticate a user. If an account with the provided username or email address already exist, a 404 response with the appropriate error message will be returned.
@@ -163,7 +163,7 @@ You are to replace the word **version** with the api version you wish to utilize
       }
       ```
     
-  - **GET**: api/*version*/*cid*/*app_name*/users/app/i/
+  - **GET**: api/:version/:cid/:app_name/users/app/i/
 
     Retrieve the data of the currently authenticated user.
 
@@ -209,7 +209,7 @@ You are to replace the word **version** with the api version you wish to utilize
       }
       ```
 
-  - **PUT**|**PATCH**: api/*version*/*cid*/*app_name*/users/app/i/update/
+  - **PUT**|**PATCH**: api/:version/:cid/:app_name/users/app/i/update/
 
     Update the data of the currently authenticated user. Supports both **PUT** & **PATCH** request methods.
     > NOTE: You cannot change the password of any user account via this methods, to do that you will need to login to your creators dashboard and update the password for all users in the specified app instance. You can pass only the fields you wish to update in the request body. The fields **app_name**, **cid**, **uid**, **aid**, **app_name** are read only and should not be provided, it will be ignored if found i the request body.
@@ -267,7 +267,7 @@ You are to replace the word **version** with the api version you wish to utilize
       }
       ```
 
-  - **DELETE**: api/*version*/*cid*/*app_name*/users/app/i/delete/
+  - **DELETE**: api/:version/:cid/:app_name/users/app/i/delete/
 
     Delete the currently authenticated user from the system permanently.
 
@@ -308,7 +308,7 @@ You are to replace the word **version** with the api version you wish to utilize
       }
       ```
 
-  - #### **POST**: api/*version*/auth/login/token/
+  - #### **POST**: api/:version/auth/login/token/
 
     Authenticate a user via **Token Authentication**. Note, the username field can take a valid username or email address.
 
@@ -352,7 +352,7 @@ You are to replace the word **version** with the api version you wish to utilize
       }
       ```
 
-  - **POST**: api/*version*/auth/refresh/token/
+  - **POST**: api/:version/auth/refresh/token/
 
     Use the longer-lived refresh token to obtain another access token. The **refresh** token is gotten from the successful sign in via token response.
 
@@ -389,7 +389,7 @@ You are to replace the word **version** with the api version you wish to utilize
       }
       ```
   
-  - **POST**: api/*version*/auth/verify/token/
+  - **POST**: api/:version/auth/verify/token/
 
     Verify the authenticity of a token.
 
@@ -424,7 +424,7 @@ You are to replace the word **version** with the api version you wish to utilize
       }
       ```
   
-  - **POST**: api/*version*/auth/login/session/
+  - **POST**: api/:version/auth/login/session/
 
     Authenticate a user via **Session Authentication**. Note, the username field can take a valid username or email address.
   
@@ -455,7 +455,7 @@ You are to replace the word **version** with the api version you wish to utilize
       }
       ```
 
-  - **POST**: api/*version*/auth/logout/session/
+  - **POST**: api/:version/auth/logout/session/
 
     Logout a user session.
     > NOTE: You need to make sure you include a valid X-CSRFToken token for any "unsafe" HTTP method calls in the request header, such as **PUT**, **PATCH**, **POST** or **DELETE** requests.
