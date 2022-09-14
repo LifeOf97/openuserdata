@@ -97,7 +97,7 @@ class CreatorsOpenuserdataApiViewset(viewsets.ModelViewSet):
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(
-            data={'error': _('You have reached your open users limit (25)')},
+            data={'error': _(F'You have reached your open users limit ({settings.MAX_NUMBER_OF_PROFILES})')},
             status=status.HTTP_400_BAD_REQUEST
         )
 

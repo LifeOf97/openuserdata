@@ -201,7 +201,7 @@ REST_FRAMEWORK = {
 }
 
 # settings
-MAX_NUMBER_OF_PROFILES = 25
+MAX_NUMBER_OF_PROFILES = 50
 
 # Django filter settings
 FILTERS_DEFAULT_LOOKUP_EXPR = 'iexact'
