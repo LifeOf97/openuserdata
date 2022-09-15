@@ -11,12 +11,16 @@ click-repl==0.2.0
 coverage==6.4.1
 Deprecated==1.2.13
 Django==4.0.4
+django-celery-beat==2.3.0
 django-filter==22.1
+django-timezone-field==5.0
 djangorestframework==3.13.1
 djangorestframework-simplejwt==5.2.0
 drf-spectacular==0.23.1
 Faker==13.12.1
 flake8==4.0.1
+flower==1.2.0
+humanize==4.3.0
 inflection==0.5.1
 iniconfig==1.1.1
 jsonschema==4.16.0
@@ -26,6 +30,7 @@ packaging==21.3
 pika==1.2.1
 Pillow==9.1.1
 pluggy==1.0.0
+prometheus-client==0.14.1
 prompt-toolkit==3.0.29
 psycopg2-binary==2.9.3
 py==1.11.0
@@ -37,6 +42,7 @@ pyrsistent==0.18.1
 pytest==7.1.2
 pytest-cov==3.0.0
 pytest-django==4.5.2
+python-crontab==2.6.0
 python-dateutil==2.8.2
 python-dotenv==0.20.0
 pytz==2022.1
@@ -45,6 +51,8 @@ redis==4.3.3
 six==1.16.0
 sqlparse==0.4.2
 tomli==2.0.1
+tornado==6.2
+tzdata==2022.2
 uritemplate==4.1.1
 vine==5.0.0
 wcwidth==0.2.5

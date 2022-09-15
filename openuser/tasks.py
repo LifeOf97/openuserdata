@@ -176,3 +176,7 @@ def delete_openuserapp(data):
 #     message broker concerning the newly created openuserapp user.
 #     """
 #     RabbitMQProducer().publish_message(data=data, routing_key='new_user')
+
+@app.task
+def add_one(x: int = 1, y: int = 1):
+    return x + y

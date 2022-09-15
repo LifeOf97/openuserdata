@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'django_filters',
     'drf_spectacular',
+    'django_celery_beat'
 ]
 
 
@@ -258,3 +259,13 @@ Authentication/Authorization, and more over REST API.",
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
 }
+
+
+# Celery beat settings
+# CELERY_BEAT_SCHEDULE = {
+#     "scheduled_task": {
+#         "task": "openuser.tasks.add_one",
+#         "schedule": 5.0,
+#         "args": (5, 5),
+#     },
+# }
