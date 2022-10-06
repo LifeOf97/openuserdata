@@ -24,34 +24,39 @@ urlpatterns = [
 
     # Creators openuserdata urls endpoint with full capabilities
     path(
-        'api/<version>/<str:cid>/<str:app_name>/users/',
+        'api/<version>/<str:cid>/<str:app_name>/app/users/',
         apis.CreatorsOpenuserdataApiViewset.as_view({'get': 'list'}),
         name='users_list'
     ),
     path(
-        'api/<version>/<str:cid>/<str:app_name>/users/<str:username>/',
-        apis.CreatorsOpenuserdataApiViewset.as_view({'get': 'retrieve'}),
-        name='users_details_username'
-    ),
-    path(
-        'api/<version>/<str:cid>/<str:app_name>/users/app/add/',
+        'api/<version>/<str:cid>/<str:app_name>/app/users/new/',
         apis.CreatorsOpenuserdataApiViewset.as_view({'post': 'create'}),
         name='users_create'
     ),
     path(
-        'api/<version>/<str:cid>/<str:app_name>/users/app/i/',
+        'api/<version>/<str:cid>/<str:app_name>/app/users/me/',
         apis.CreatorsOpenuserdataApiViewset.as_view({'get': 'retrieve'}),
         name='users_details_authenticated'
     ),
     path(
-        'api/<version>/<str:cid>/<str:app_name>/users/app/i/update/',
+        'api/<version>/<str:cid>/<str:app_name>/app/users/me/update/',
         apis.CreatorsOpenuserdataApiViewset.as_view({'put': 'update', 'patch': 'update'}),
         name='users_update_authenticated'
     ),
     path(
-        'api/<version>/<str:cid>/<str:app_name>/users/app/i/delete/',
+        'api/<version>/<str:cid>/<str:app_name>/app/users/me/delete/',
         apis.CreatorsOpenuserdataApiViewset.as_view({'delete': 'destroy'}),
         name='users_delete_authenticated'
+    ),
+    path(
+        'api/<version>/<str:cid>/<str:app_name>/app/users/count/',
+        apis.CreatorsOpenuserdataApiViewset.as_view({'get': 'app_users_count'}),
+        name='users_count'
+    ),
+    path(
+        'api/<version>/<str:cid>/<str:app_name>/app/users/<str:username>/',
+        apis.CreatorsOpenuserdataApiViewset.as_view({'get': 'retrieve'}),
+        name='users_details_username'
     ),
 
     # user authentication urls endpoint

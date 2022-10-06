@@ -4,6 +4,7 @@ from rest_framework import status, viewsets, views
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework import permissions
 from django.conf import settings
 from django.http import Http404
@@ -54,7 +55,7 @@ class CreatorsOpenuserdataApiViewset(viewsets.ModelViewSet):
     throttle_scope = 'creators'
 
     def get_permissions(self, *args, **kwargs):
-        if self.action in ['create', 'list', 'retrieve']:
+        if self.action in ['create', 'list', 'retrieve', 'app_users_count']:
             permission_classes = [permissions.AllowAny, ]
         else:
             permission_classes = [permissions.IsAuthenticated, ]
@@ -71,7 +72,7 @@ class CreatorsOpenuserdataApiViewset(viewsets.ModelViewSet):
     def get_object(self, *args, **kwargs):
         queryset = self.get_queryset()
 
-        if 'app/i/' in self.request.path:
+        if 'app/me/' in self.request.path:
             obj = get_object_or_404(queryset, username=self.request.user.username)
         else:
             obj = get_object_or_404(queryset, username=self.kwargs['username'])
@@ -152,6 +153,17 @@ class CreatorsOpenuserdataApiViewset(viewsets.ModelViewSet):
                 data={'error': 'Cannot delete any more user, as every app instance must have atleast 2 active users'},
                 status=status.HTTP_403_FORBIDDEN
             )
+
+    # extra actions
+    @action(detail=False, methods=['GET'],)
+    def app_users_count(self, request, *args, **kwargs):
+        """
+        Returns the total number of users in your app.
+        """
+        return Response(
+            data={'detail': self.get_queryset().count()},
+            status=status.HTTP_200_OK
+        )
 
 
 class LoginSessionApiView(viewsets.GenericViewSet):

@@ -1,7 +1,7 @@
 from .forms import CustomAppUserCreationForm, CustomAppUserChangeForm
 from django_celery_beat.admin import ClockedScheduleAdmin, PeriodicTaskAdmin
 from django_celery_beat.models import (
-    PeriodicTask, IntervalSchedule,CrontabSchedule,
+    PeriodicTask, IntervalSchedule, CrontabSchedule,
     SolarSchedule, ClockedSchedule
 )
 from django.contrib.auth.admin import UserAdmin

@@ -13,7 +13,7 @@ import random
 User = get_user_model()
 
 # Faker data
-unsplash_random_image = 'https://source.unsplash.com/random/640%C3%97426/?random'
+unsplash_random_image = 'https://source.unsplash.com/random/640%C3%97426/?profile'
 fake = Faker(locale='en_US')
 
 # Get current site url
@@ -176,7 +176,3 @@ def delete_openuserapp(data):
 #     message broker concerning the newly created openuserapp user.
 #     """
 #     RabbitMQProducer().publish_message(data=data, routing_key='new_user')
-
-@app.task
-def add_one(x: int = 1, y: int = 1):
-    return x + y
