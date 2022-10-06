@@ -3,9 +3,9 @@ venv*
 .pytest_cache
 **/*.env
 logs/
-**/*.sh
 email
 .coverage
 htmlcov
 db.sqlite*
 *.env
+*.env.*

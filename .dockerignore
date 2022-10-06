@@ -3,8 +3,8 @@ venv*
 .pytest_cache
 **/*.env
 logs/
-**/*.sh
 .coverage
 htmlcov
 db.sqlite*
 *.env
+*.env.*

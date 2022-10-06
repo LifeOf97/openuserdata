@@ -16,7 +16,11 @@ DEVELOPER = {
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # load env file
-load_dotenv(dotenv_path=F"{BASE_DIR}/.env")
+if os.environ.get("ENVIRONMENT") == 'docker':
+    ...
+else:
+    load_dotenv(dotenv_path=F"{BASE_DIR}/.env")
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -25,7 +29,7 @@ load_dotenv(dotenv_path=F"{BASE_DIR}/.env")
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get("DEBUG", 0))
 
 ALLOWED_HOSTS = ["*"]
 
@@ -89,30 +93,26 @@ WSGI_APPLICATION = 'src.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-
-# if in github actions
-# if os.environ.get('GITHUB_WORKFLOW'):
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql',
-#             'NAME': 'github_actions',
-#             'USER': 'postgres',
-#             'PASSWORD': 'postgres',
-#             'HOST': '127.0.0.1',
-#             'PORT': 5432
-#         }
-#     }
-# else:
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': os.environ.get('DB_NAME', 'github_actions'),
-        'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASS', 'postgres'),
-        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
-        'PORT': os.environ.get('DB_PORT', 5432)
+        'NAME': os.environ.get('POSTGRES_DB', 'github_actions'),
+        'USER': os.environ.get('POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'postgres'),
+        'HOST': os.environ.get('POSTGRES_HOST', '127.0.0.1'),
+        'PORT': os.environ.get('POSTGRES_PORT', 5432)
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3'),
+#         'NAME': os.environ.get('DB_NAME', 'db.sqlite3'),
+#         'USER': os.environ.get('DB_USER', 'user'),
+#         'PASSWORD': os.environ.get('DB_PASS', 'password'),
+#         'HOST': os.environ.get('DB_HOST', 'localhost'),
+#         'PORT': os.environ.get('DB_PORT', 5432)
+#     }
+# }
 
 
 # Password validation
@@ -152,20 +152,33 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles/'
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 # Django custom user model
 AUTH_USER_MODEL = 'openuser.User'
+
 
 # Django authentication settings
 AUTHENTICATION_BACKENDS = [
     'openuser.authentications.CustomUserBackend',
 ]
 
-# DjangoRestframework settings
+
+# Django security Settings
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SECURE = False
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:1337']
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_HTTPONLY = False
+
+
+# DjangoRestFramework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -202,11 +215,13 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-# settings
+# developer app settings
 MAX_NUMBER_OF_PROFILES = 50
+
 
 # Django filter settings
 FILTERS_DEFAULT_LOOKUP_EXPR = 'iexact'
+
 
 # Celery settings
 # CELERY_BROKER_URL = os.environ.get('REDIS_URL')
@@ -215,9 +230,17 @@ CELERY_TIMEZONE = 'Africa/Lagos'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = None
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+# CELERY_BROKER_POOL_LIMIT = 1
+# CELERY_BROKER_HEARTBEAT = None
+# CELERY_BROKER_CONNECTION_TIMEOUT = 30
+# CELERY_EVENT_QUEUE_EXPIRES = 60
+# CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+# CELERY_WORKER_CONCURRENCY = 50
 
 
-# Simplejwt settings
+# Django Simplejwt settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=12),
     'REFRESH_TOKEN_LIFETIME': timedelta(hours=12),
@@ -250,7 +273,8 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
-# Django spectacular settings
+
+# Django spectacular settings. API Documentation
 SPECTACULAR_SETTINGS = {
     'TITLE': "Open user data API",
     'DESCRIPTION': "Open user data proveds fully functional free fake user data API \
@@ -261,6 +285,7 @@ Authentication/Authorization, and more over REST API.",
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
 }
+
 
 # Django corsheaders settings
 CORS_ALLOW_ALL_ORIGINS = True

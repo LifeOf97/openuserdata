@@ -1,7 +1,7 @@
 ############################
 # Base image
 ############################
-FROM python3.10:slime-buster as builder
+FROM python:3.10-slim-buster
 
 # working directory
 WORKDIR /usr/src/app
@@ -10,11 +10,21 @@ WORKDIR /usr/src/app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# copy dependencies and install
+# update apt and install needed dependencies
+RUN apt update && apt-get -y install netcat
+
+# upgrade pip, copy over requirement file and install dependencies
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
-# copy over the whole project, make sure to set .dockerignore
+# copy over entrypoint.sh and mark it as executable
+COPY ./entrypoint.sh .
+RUN chmod +x /usr/src/app/entrypoint.sh
+
+# copy over the project, make sure to set .dockerignore
 # to prevent copying unnecessary files
 COPY . .
+
+# run the entrypoint.sh
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
