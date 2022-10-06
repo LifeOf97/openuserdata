@@ -70,7 +70,7 @@ ROOT_URLCONF = 'src.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR.joinpath('templates/')],
+        'DIRS': [BASE_DIR / 'templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -91,28 +91,28 @@ WSGI_APPLICATION = 'src.wsgi.application'
 
 
 # if in github actions
-if os.environ.get('GITHUB_WORKFLOW'):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'github_actions',
-            'USER': 'postgres',
-            'PASSWORD': 'postgres',
-            'HOST': '127.0.0.1',
-            'PORT': 5432
-        }
+# if os.environ.get('GITHUB_WORKFLOW'):
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': 'github_actions',
+#             'USER': 'postgres',
+#             'PASSWORD': 'postgres',
+#             'HOST': '127.0.0.1',
+#             'PORT': 5432
+#         }
+#     }
+# else:
+DATABASES = {
+    'default': {
+        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.environ.get('DB_NAME', 'github_actions'),
+        'USER': os.environ.get('DB_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DB_PASS', 'postgres'),
+        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
+        'PORT': os.environ.get('DB_PORT', 5432)
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': os.environ.get('DB_ENGINE'),
-            'NAME': os.environ.get('DB_NAME'),
-            'USER': os.environ.get('DB_USER'),
-            'PASSWORD': os.environ.get('DB_PASS'),
-            'HOST': 'localhost',
-            'PORT': 5432
-        }
-    }
+}
 
 
 # Password validation
@@ -253,7 +253,8 @@ SIMPLE_JWT = {
 # Django spectacular settings
 SPECTACULAR_SETTINGS = {
     'TITLE': "Open user data API",
-    'DESCRIPTION': "Open user data provides dummy user data over REST API. It's main purpose \
+    'DESCRIPTION': "Open user data proveds fully functional free fake user data API \
+for testing and prototyping, with authentication. It's main purpose \
 is to provide an API endpoint where developers can practice CRUD operations, \
 Authentication/Authorization, and more over REST API.",
     'VERSION': "1.0.0",
