@@ -72,7 +72,7 @@ class CreatorsOpenuserdataApiViewset(viewsets.ModelViewSet):
     def get_object(self, *args, **kwargs):
         queryset = self.get_queryset()
 
-        if 'app/me/' in self.request.path:
+        if 'users/me/' in self.request.path:
             obj = get_object_or_404(queryset, username=self.request.user.username)
         else:
             obj = get_object_or_404(queryset, username=self.kwargs['username'])
