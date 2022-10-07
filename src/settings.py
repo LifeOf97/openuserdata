@@ -103,16 +103,6 @@ DATABASES = {
         'PORT': os.environ.get('POSTGRES_PORT', 5432)
     }
 }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3'),
-#         'NAME': os.environ.get('DB_NAME', 'db.sqlite3'),
-#         'USER': os.environ.get('DB_USER', 'user'),
-#         'PASSWORD': os.environ.get('DB_PASS', 'password'),
-#         'HOST': os.environ.get('DB_HOST', 'localhost'),
-#         'PORT': os.environ.get('DB_PORT', 5432)
-#     }
-# }
 
 
 # Password validation
@@ -152,6 +142,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles/'
 
+MEDI_URL = 'media/'
+MEDI_ROOT = BASE_DIR / 'mediafiles/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -173,7 +166,7 @@ AUTHENTICATION_BACKENDS = [
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SECURE = False
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:1337']
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8001']
 SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_HTTPONLY = False
 
@@ -224,8 +217,11 @@ FILTERS_DEFAULT_LOOKUP_EXPR = 'iexact'
 
 
 # Celery settings
-# CELERY_BROKER_URL = os.environ.get('REDIS_URL')
-CELERY_BROKER_URL = os.environ.get('RABBITMQ_URL')
+if os.environ.get("ENVIRONMENT") == 'docker':
+    CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_REDIS', 'redis://redis:6379/0')
+else:
+    CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_RABBITMQ', 'amqp://guest:guest@localhost:5672')
+
 CELERY_TIMEZONE = 'Africa/Lagos'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'

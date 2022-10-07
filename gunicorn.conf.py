@@ -1,7 +1,7 @@
 import multiprocessing
 
 # bind
-bind = "0.0.0.0:8001"
+bind = "0.0.0.0:8000"
 # bind = "unix:/run/cgims.sock"
 
 workers = multiprocessing.cpu_count() * 2 + 1

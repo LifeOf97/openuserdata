@@ -51,7 +51,7 @@ ENV PATH="${PATH}:${HOME}/.local/bin"
 RUN pip install --user --no-cache /wheels/*
 
 # copy project over
-COPY --chown=realestkma:realestkma . $APP_HOME
+COPY --chown=realestkma:realestkma . .
 
 # run entrypoint script
 ENTRYPOINT ["/home/realestkma/app/entrypoint.sh"]
