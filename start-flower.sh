@@ -18,6 +18,7 @@ done
     echo 'Celery workers now available, starting flower...'
 
 celery -A src flower \
-    --port=5555 \
+    --port=8000 \
     --auth_provider=flower.views.auth.GithubLoginHandler \
-    --auth=${FLOWER_AUTH_EMAIL}
+    --auth=${FLOWER_AUTH_EMAIL} \
+    --url_prefix=flower/

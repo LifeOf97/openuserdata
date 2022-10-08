@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 if os.environ.get("ENVIRONMENT") == 'docker':
     ...
 else:
-    load_dotenv(dotenv_path=F"{BASE_DIR}/.env")
+    load_dotenv(dotenv_path=F"{BASE_DIR}/.env.dev")
 
 
 # Quick-start development settings - unsuitable for production
@@ -217,7 +217,7 @@ FILTERS_DEFAULT_LOOKUP_EXPR = 'iexact'
 
 
 # Celery settings
-if os.environ.get("ENVIRONMENT") == 'docker':
+if os.environ.get("ENVIRONMENT", "local") == 'docker':
     CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_REDIS', 'redis://redis:6379/0')
 else:
     CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_RABBITMQ', 'amqp://guest:guest@localhost:5672')

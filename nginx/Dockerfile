@@ -1,18 +1,8 @@
-FROM nginx:1.23-alpine
+FROM jwilder/nginx-proxy:alpine
 
-RUN rm /etc/nginx/conf.d/default.conf
+COPY vhost.d/default /etc/nginx/vhost.d/default
+COPY proxy.conf /etc/nginx/proxy.conf
 
-# set permissions for nginx user
-RUN chown -R nginx:nginx /var/cache/nginx && \
-    chown -R nginx:nginx /var/log/nginx && \
-    chown -R nginx:nginx /etc/nginx/conf.d
+# ARG HASH=$(echo -n $VIRTUAL_PATH | sha1sum | awk '{ print $1 }')
 
-RUN touch /var/run/nginx.pid && \
-    chown -R nginx:nginx /var/run/nginx.pid
-
-# copy over conf file
-COPY --chown=nginx:nginx nginx.conf /etc/nginx/conf.d
-COPY --chown=nginx:nginx proxy_params /etc/nginx
-
-# set system user
-USER nginx
+# COPY ./vhost.d/flower_location /etc/nginx/vhost.d/${VIRTUAL_HOST}_${HASH}_location

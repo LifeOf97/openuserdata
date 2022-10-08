@@ -8,10 +8,13 @@ services:
     command: gunicorn -c gunicorn.conf.py src.wsgi:application
     volumes:
       - static_volume:/home/realestkma/app/staticfiles
+      - media_volume:/home/realestkma/app/mediafiles
     expose:
       - 8000
     env_file:
-      - ./.env.dev
+      - ./.env
+    environment:
+      - VIRTUAL_PATH=/
     depends_on:
       - db
 
@@ -20,7 +23,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env.dev
+      - ./.env
     
   redis:
     image: redis:7-alpine
@@ -33,7 +36,7 @@ services:
       dockerfile: Dockerfile
     command:  celery -A src worker -l INFO
     env_file:
-      - ./.env.dev
+      - ./.env
     depends_on:
       - redis
 
@@ -43,20 +46,29 @@ services:
       dockerfile: Dockerfile
     command: ./start-flower.sh
     expose:
-      - 5555
+      - 8000
     env_file:
-      - ./.env.dev
+      - ./.env
+    environment:
+      - VIRTUAL_PATH=/flower/
     depends_on:
       - redis
 
-  nginx:
+  nginx-proxy:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-    volumes:
-      - static_volume:/home/realestkma/app/staticfiles
+    restart: always
     ports:
       - 8001:80
+      - 443:443
+    volumes:
+      - static_volume:/home/realestkma/app/staticfiles
+      - media_volume:/home/realestkma/app/mediafiles
+      - certs:/etc/nginx/certs
+      - html:/usr/share/nginx/html
+      - vhost:/etc/nginx/vhost.d
+      - /var/run/docker.sock:/tmp/docker.sock:ro
     depends_on:
       - api
       - flower
@@ -65,3 +77,8 @@ services:
 volumes:
   postgres_data:
   static_volume:
+  media_volume:
+  certs:
+  html:
+  vhost:
+  acme:
