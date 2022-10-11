@@ -12,7 +12,7 @@ from django.contrib import admin
 
 
 class MyAdminSite(admin.AdminSite):
-    site_header = "Openuserdata administration"
+    site_header = "Open User Data Administration"
 
 
 # class AddressAdmin(admin.StackedInline):

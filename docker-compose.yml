@@ -41,6 +41,18 @@ services:
     depends_on:
       - redis
 
+  pika_consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python /home/realestkma/app/openuser/pika_consumers.py
+    restart: always
+    env_file:
+      - ./.env
+    depends_on:
+      - redis
+      - celery
+
   flower:
     build:
       context: .
@@ -63,7 +75,7 @@ services:
     restart: always
     ports:
       - 8001:80
-      - 443:443
+      # - 443:443
     volumes:
       - static_volume:/home/realestkma/app/staticfiles
       - media_volume:/home/realestkma/app/mediafiles
