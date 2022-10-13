@@ -4,22 +4,26 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    command: python manage.py runserver 0.0.0.0:8001
+      dockerfile: Dockerfile
+    command: gunicorn -c gunicorn.conf.py src.wsgi:application
     volumes:
       - static_volume:/home/realestkma/app/staticfiles
       - media_volume:/home/realestkma/app/mediafiles
     expose:
       - 8000
     env_file:
-      - ./.env
+      - ./.env.dev
+    environment:
+      - VIRTUAL_PATH=/
+    depends_on:
+      - db
 
   db:
     image: postgres:14-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env
+      - ./.env.dev
     
   redis:
     image: redis:7-alpine
@@ -31,32 +35,54 @@ services:
       context: .
       dockerfile: Dockerfile
     command:  celery -A src worker -l INFO
+    restart: always
     env_file:
-      - ./.env
+      - ./.env.dev
     depends_on:
       - redis
+
+  pika_consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python /home/realestkma/app/openuser/pika_consumers.py
+    restart: always
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - redis
+      - celery
 
   flower:
     build:
       context: .
       dockerfile: Dockerfile
     command: ./start-flower.sh
+    restart: always
     expose:
-      - 5555
+      - 8000
     env_file:
-      - ./.env
+      - ./.env.dev
+    environment:
+      - VIRTUAL_PATH=/flower/
     depends_on:
       - redis
 
-  nginx:
+  nginx-proxy:
     build:
       context: ./nginx
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8001:80
+      # - 443:443
     volumes:
       - static_volume:/home/realestkma/app/staticfiles
       - media_volume:/home/realestkma/app/mediafiles
-    ports:
-      - 8001:80
+      - certs:/etc/nginx/certs
+      - html:/usr/share/nginx/html
+      - vhost:/etc/nginx/vhost.d
+      - /var/run/docker.sock:/tmp/docker.sock:ro
     depends_on:
       - api
       - flower
@@ -65,3 +91,8 @@ services:
 volumes:
   postgres_data:
   static_volume:
+  media_volume:
+  certs:
+  html:
+  vhost:
+  acme:

@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 if os.environ.get("ENVIRONMENT") == 'docker':
     ...
 else:
-    load_dotenv(dotenv_path=F"{BASE_DIR}/.env.dev")
+    load_dotenv(dotenv_path=F"{BASE_DIR}/.env")
 
 
 # Quick-start development settings - unsuitable for production
