@@ -65,7 +65,7 @@ services:
       - redis
       - celery
 
-  nginx_proxy:
+  nginx-proxy:
     build:
       context: ./nginx
       dockerfile: Dockerfile
