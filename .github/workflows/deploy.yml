@@ -3,7 +3,13 @@
 name: CD Deploy (Azure)
 
 on:
-  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - test
+    branches:
+      - main
+    types:
+      - completed
 
 
 jobs:
@@ -15,6 +21,7 @@ jobs:
       - name: Checkout codebase
         uses: actions/checkout@v3
       
+      if: ${{ github.event.workflow_run.conclusion == 'success' }}
       - name: Run docker-compose up
         run: |
           docker-compose -f docker-compose.prod.yml up --detach --build
