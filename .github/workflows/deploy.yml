@@ -12,9 +12,6 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Checkout codebase
-        uses: actions/checkout@v3
-      
       - name: Run docker-compose up
         run: |
           docker-compose -f docker-compose.prod.yml up --build --detach
