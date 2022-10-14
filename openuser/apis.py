@@ -1,8 +1,7 @@
-from drf_spectacular.utils import extend_schema, OpenApiParameter
 from django.contrib.auth import authenticate, login, logout
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status, viewsets, views
-from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response

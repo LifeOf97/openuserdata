@@ -12,7 +12,9 @@ jobs:
     runs-on: self-hosted
 
     steps:
-        # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      - name: Checkout codebase
+        uses: actions/checkout@v3
+      
       - name: Run docker-compose up
         run: |
           docker-compose -f docker-compose.prod.yml up --build --detach
