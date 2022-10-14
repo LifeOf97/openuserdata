@@ -6,6 +6,7 @@ from . import apis
 
 urlpatterns = [
     # schema
+    path('', apis.APIRootView.as_view(), name='api_root_view'),
     path('api/<version>/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/<version>/schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/<version>/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),

@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.reverse import reverse
 from rest_framework import permissions
 from django.conf import settings
 from django.http import Http404
@@ -15,6 +16,24 @@ from . import filters
 
 # Custom user model
 User = get_user_model()
+
+
+class APIRootView(views.APIView):
+
+    @extend_schema(request=None, responses={200: None})
+    def get(self, request):
+        """
+        Brief service details
+        """
+        data = {
+            'Hello': 'Welcome to Open User Data REST API free service',
+            'Home Page': 'https://openuser.xyz',
+            'Documentations': {
+                'REDOC': reverse('redoc', request=request),
+                'SWAGGER': reverse('swagger-ui', request=request),
+            }
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
 class OpenUserDataApiViewset(viewsets.ReadOnlyModelViewSet):
