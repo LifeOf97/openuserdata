@@ -17,4 +17,4 @@ jobs:
       
       - name: Run docker-compose up
         run: |
-          docker-compose -f docker-compose.prod.yml up --build --detach
+          docker-compose -f docker-compose.prod.yml up --detach --build
