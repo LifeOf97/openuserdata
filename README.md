@@ -615,3 +615,6 @@ As a creator:
 - You can increase & decrease bulk user at once.
 - You can update the password of all users in an application.
   > NOTE: All users in an application must share the same password.
+
+#
+Will keep updating this README file as changes occures. Thank you.
