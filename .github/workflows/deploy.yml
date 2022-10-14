@@ -4,7 +4,7 @@ name: CD Deploy (Azure)
 
 on:
   workflow_run:
-    workflows: ["test"]
+    workflows: ["CI Test (pytest)"]
     branches: [main]
     types:
       - completed
