@@ -1,0 +1,18 @@
+# This action deploys my containerized app. Uses docker-compose up to start app
+
+name: CD Deploy (Azure)
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  deploy-app:
+
+    runs-on: self-hosted
+
+    steps:
+        # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      - name: Run docker-compose up
+        run: |
+          docker-compose -f docker-compose.prod.yml up --build --detach

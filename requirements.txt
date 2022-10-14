@@ -11,7 +11,6 @@ click-repl==0.2.0
 coverage==6.4.1
 Deprecated==1.2.13
 Django==4.0.4
-django-celery-beat==2.3.0
 django-cors-headers==3.13.0
 django-filter==22.1
 django-timezone-field==5.0

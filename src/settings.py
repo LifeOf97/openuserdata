@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'drf_spectacular',
-    'django_celery_beat'
 ]
 
 
@@ -99,7 +98,7 @@ DATABASES = {
         'NAME': os.environ.get('POSTGRES_DB', 'github_actions'),
         'USER': os.environ.get('POSTGRES_USER', 'postgres'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'postgres'),
-        'HOST': os.environ.get('POSTGRES_HOST', '127.0.0.1'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
         'PORT': os.environ.get('POSTGRES_PORT', 5432)
     }
 }
@@ -166,10 +165,18 @@ AUTHENTICATION_BACKENDS = [
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SECURE = False
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8001']
+CSRF_TRUSTED_ORIGINS = [
+    'http://20.224.147.0',
+    'https://20.224.147.0',
+    'http://*.openuserdata.xyz',
+    'https://*.openuserdata.xyz',
+    'http://127.0.0.1:8001'
+]
 SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_HTTPONLY = False
-
+SECURE_HSTS_SECONDS = 0
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = False
 
 # DjangoRestFramework settings
 REST_FRAMEWORK = {
@@ -288,13 +295,3 @@ CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOWED_ORIGINS = []
 CORS_ALLOW_CREDENTIALS = True
 # CORS_PREFLIGHT_MAX_AGE =
-
-
-# Celery beat settings
-# CELERY_BEAT_SCHEDULE = {
-#     "scheduled_task": {
-#         "task": "openuser.tasks.add_one",
-#         "schedule": 5.0,
-#         "args": (5, 5),
-#     },
-# }

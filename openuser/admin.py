@@ -1,9 +1,4 @@
 from .forms import CustomAppUserCreationForm, CustomAppUserChangeForm
-from django_celery_beat.admin import ClockedScheduleAdmin, PeriodicTaskAdmin
-from django_celery_beat.models import (
-    PeriodicTask, IntervalSchedule, CrontabSchedule,
-    SolarSchedule, ClockedSchedule
-)
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import Group
@@ -13,11 +8,6 @@ from django.contrib import admin
 
 class MyAdminSite(admin.AdminSite):
     site_header = "Open User Data Administration"
-
-
-# class AddressAdmin(admin.StackedInline):
-#     model = Address
-#     readonly_fields = ('id', )
 
 
 class OpenusercreatorAdmin(admin.ModelAdmin):
@@ -60,10 +50,3 @@ admin_site.register(Site)
 # admin_site.register(Address)
 admin_site.register(User, AppUserAdmin)
 admin_site.register(OpenuserCreator, OpenusercreatorAdmin)
-
-# django_celery_beat
-admin_site.register(IntervalSchedule)
-admin_site.register(CrontabSchedule)
-admin_site.register(SolarSchedule)
-admin_site.register(ClockedSchedule, ClockedScheduleAdmin)
-admin_site.register(PeriodicTask, PeriodicTaskAdmin)

@@ -71,7 +71,7 @@ services:
   nginx-proxy:
     build:
       context: ./nginx
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     restart: always
     ports:
       - 8001:80
