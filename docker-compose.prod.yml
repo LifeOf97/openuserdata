@@ -80,7 +80,7 @@ services:
       - flower
 
   nginx-proxy-letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
+    image: nginxproxy/acme-companion:2.2
     env_file:
       - /home/realestkma/.env.prod
     volumes:
