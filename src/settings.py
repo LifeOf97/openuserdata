@@ -205,7 +205,7 @@ REST_FRAMEWORK = {
         'anon': '25/minute'
     },
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 5,
+    'PAGE_SIZE': 50,
     "SEARCH_PARAM": 'q',
     'ORDERING_PARAM': 'order',
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
