@@ -17,5 +17,5 @@ jobs:
       
       - name: Run docker-compose up
         run:  |
-        docker ps -a
-        pwd
+          docker ps -a
+          pwd
