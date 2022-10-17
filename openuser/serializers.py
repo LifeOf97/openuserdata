@@ -8,6 +8,12 @@ from rest_framework import serializers
 User = get_user_model()
 
 
+class APIRootSerializer(serializers.Serializer):
+    hello = serializers.CharField()
+    home_page = serializers.CharField()
+    documentations = serializers.JSONField()
+
+
 class CreatorsOpenUserDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

@@ -20,17 +20,17 @@ User = get_user_model()
 
 class APIRootView(views.APIView):
 
-    @extend_schema(request=None, responses={200: None})
+    @extend_schema(request=None, responses={200: serializers.APIRootSerializer})
     def get(self, request):
         """
         Brief service details
         """
         data = {
-            'Hello': 'Welcome to Open User Data REST API free service',
-            'Home Page': 'https://openuser.xyz',
-            'Documentations': {
-                'REDOC': reverse('redoc', request=request),
-                'SWAGGER': reverse('swagger-ui', request=request),
+            'hello': 'Welcome to Open User Data REST API free service',
+            'home_page': 'https://openuser.xyz',
+            'documentations': {
+                'redoc': reverse('redoc', request=request),
+                'swagger': reverse('swagger-ui', request=request),
             }
         }
         return Response(data=data, status=status.HTTP_200_OK)
