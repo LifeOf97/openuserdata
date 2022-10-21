@@ -13,7 +13,7 @@ services:
     expose:
       - 8000
     env_file:
-      - /home/realestkma/.env.prod
+      - /home/${USER}/.env.prod
     environment:
       - VIRTUAL_PATH=/
 
@@ -31,7 +31,7 @@ services:
     container_name: openuserdata-celery
     restart: always
     env_file:
-      - /home/realestkma/.env.prod
+      - /home/${USER}/.env.prod
     depends_on:
       - redis
 
@@ -43,7 +43,7 @@ services:
     container_name: openuserdata-pika-consumer
     restart: always
     env_file:
-      - /home/realestkma/.env.prod
+      - /home/${USER}/.env.prod
     depends_on:
       - redis
       - celery
@@ -58,7 +58,7 @@ services:
     expose:
       - 8000
     env_file:
-      - /home/realestkma/.env.prod
+      - /home/${USER}/.env.prod
     environment:
       - VIRTUAL_PATH=/flower/
     depends_on:
@@ -89,7 +89,7 @@ services:
     image: nginxproxy/acme-companion:2.2
     container_name: openuserdata-nginx-letsencrypt
     env_file:
-      - /home/realestkma/.env.prod
+      - /home/${USER}/.env.prod
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - certs:/etc/nginx/certs
