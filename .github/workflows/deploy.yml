@@ -1,4 +1,6 @@
-# This action deploys my containerized app. Uses docker-compose up to start app
+# This action deploys my containerized apps. Uses docker compose up to start app
+# some times, docker-compose up (step 4) just keeps loading for some minutes
+# then stops with an error, implying that the server is not responding
 
 name: CD Deploy (Azure)
 
