@@ -19,7 +19,7 @@ jobs:
         run:  ping -c4 azure.microsoft.com
       
       - name: Show docker containers
-        run:  docker ps -a
+        run:  docker compose -f docker-compose.prod.yml ps -a
 
-      - name: Run docker-compose up
-        run:  docker-compose -f docker-compose.prod.yml up -d --build
+      - name: Run docker compose up
+        run:  docker compose -f docker-compose.prod.yml up --detach --build

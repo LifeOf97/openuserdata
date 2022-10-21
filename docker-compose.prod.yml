@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     command: gunicorn -c gunicorn.conf.py src.wsgi:application
-    container_name: openuserdata_api
+    container_name: openuserdata-api
     volumes:
       - static_volume:/home/realestkma/app/staticfiles
       - media_volume:/home/realestkma/app/mediafiles
@@ -19,7 +19,7 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: openuserdata_redis
+    container_name: openuserdata-redis
     expose:
       - 6379
 
@@ -28,7 +28,7 @@ services:
       context: .
       dockerfile: Dockerfile
     command:  celery -A src worker -l INFO
-    container_name: openuserdata_celery
+    container_name: openuserdata-celery
     restart: always
     env_file:
       - /home/realestkma/.env.prod
@@ -40,7 +40,7 @@ services:
       context: .
       dockerfile: Dockerfile
     command: python /home/realestkma/app/openuser/pika_consumers.py
-    container_name: openuserdata_pika-consumer
+    container_name: openuserdata-pika-consumer
     restart: always
     env_file:
       - /home/realestkma/.env.prod
@@ -53,7 +53,7 @@ services:
       context: .
       dockerfile: Dockerfile
     command: ./start-flower.sh
-    container_name: openuserdata_flower
+    container_name: openuserdata-flower
     restart: always
     expose:
       - 8000
@@ -69,7 +69,7 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-    container_name: openuserdata_nginx-proxy
+    container_name: openuserdata-nginx-proxy
     restart: always
     ports:
       - 80:80
@@ -87,7 +87,7 @@ services:
 
   nginx-proxy-letsencrypt:
     image: nginxproxy/acme-companion:2.2
-    container_name: openuserdata_nginx-letsencrypt
+    container_name: openuserdata-nginx-letsencrypt
     env_file:
       - /home/realestkma/.env.prod
     volumes:
