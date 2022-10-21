@@ -170,7 +170,6 @@ CSRF_TRUSTED_ORIGINS = [
     'https://20.224.147.0',
     'http://*.openuserdata.xyz',
     'https://*.openuserdata.xyz',
-    'http://127.0.0.1:8001'
 ]
 SESSION_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_HTTPONLY = False
