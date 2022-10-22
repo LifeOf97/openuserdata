@@ -43,7 +43,7 @@ Welcome to *Open user data*. This is a part of the Openuser REST API service. Op
 You are to replace the word **version** with the api version you wish to utilize in the url.cAs of this moment only **v1** is available.
 
 - URL:
-  - https://openuserdata.com/
+  - https://api.openuserdata.xyz/
 - Methods & Endpoints:
 
   - **GET**: api/:version/users/
@@ -512,7 +512,7 @@ Open user data provides both **Session Base** & **Token Base** authentication fo
 Open user data uses *JWT (JSON WEB TOKEN)* for it's token based authentication. Once you make a **POST** request with a valid username/email & password to this endpoint 
 
 ```BASH
-POST: https://openuserdata.com/api/v1/auth/login/token/
+POST: https://api.openuserdata.xyz/api/v1/auth/login/token/
 ```
 
 a refresh and access token will be sent back as response. The **access** token should then be used to authenticate further requests to endpoints that requires authentication/authorization. This **access** token should be passed in the **Authorization** request header as a **Bearer** token:
@@ -533,7 +533,7 @@ Please note the following:
 Session based authentication keeps authentication details in the form of cookies. Once you make a **POST** request with a valid username/email & password to this endpoint
 
 ```BASH
-POST: https://openuserdata.com/api/v1/auth/login/session/
+POST: https://api.openuserdata.xyz/api/v1/auth/login/session/
 ```
 
 a sessionid is then added to the response cookies which is then sent back and forth on every request so the server can verify the user making the request.
@@ -555,7 +555,7 @@ Open user data uses the [LimitOffsetPagination](https://www.django-rest-framewor
 Request:
 
 ```BASH
-GET https://openuserdata.com/api/v1/?limit=100&offset=400
+GET https://api.openuserdata.xyz/api/v1/users/?limit=100&offset=400
 ```
 
 Response:
@@ -563,8 +563,8 @@ Response:
 ```JSON
 {
     "count": 10000,
-    "next": "https://openuserdata.com/api/v1/?limit=100&offset=500",
-    "previous": "https://openuserdata.com/api/v1/?limit=100&offset=300",
+    "next": "https://api.openuserdata.xyz/api/v1/users/?limit=100&offset=500",
+    "previous": "https://api.openuserdata.xyz/api/v1/users/?limit=100&offset=300",
     "results": ["..."]
 }
 ```
@@ -580,7 +580,7 @@ Usually the returned data from any successful request to the backend is the whol
     You can filter based on the following parameters, `username`, `first_name`, `last_name`, `other_name`, `gender`, `dob`, `dob__year`, `dob__year__gt` and `dob__year__lt`. And they can also be appended to each other using the **& ampersand** sign. Note, values are **case insensitive**.
 
     ```BASH
-    GET https://openuserdata.com/api/v1/user?username=john&dob__year_gt=2000
+    GET https://api.openuserdata.xyz/api/v1/user?username=john&dob__year_gt=2000
     ```
 
   - Data Searching
@@ -588,7 +588,7 @@ Usually the returned data from any successful request to the backend is the whol
     You can search for a specific data passing any of this values to the search param `username`, `first_name`, `last_name` and `other_name` this values should be an exact match of the user you are searching for. Note, values are **case insensitive**. Open user data uses the keyword **q** for searching.
 
     ```BASH
-    GET https://openuserdata.com/api/v1/user?q=john
+    GET https://api.openuserdata.xyz/api/v1/user?q=john
     ```
 
   - Date Ordering
@@ -596,7 +596,7 @@ Usually the returned data from any successful request to the backend is the whol
     You can specify in what order you want your returned data to be in. The only supported ordering values are. `username`, `email` and `dob`. Open user data uses the keyword **order** as the url param key to order data.
 
     ```BASH
-    GET https://openuserdata.com/api/v1/user?order=john
+    GET https://api.openuserdata.xyz/api/v1/user?order=john
     ```
 
 
@@ -605,20 +605,20 @@ Usually the returned data from any successful request to the backend is the whol
 Who are creators in Open user data? creators are users of open user data who have created an account in open user creators. Creators can create applications to hold a maximum number of users. This users can then be retrieved by any other user when making a request to the public users endpoint.
 
 ```BASH
-GET https://openuserdata.com/api/v1/users/
-GET https://openuserdata.com/api/v1/users/<username>/
+GET https://api.openuserdata.xyz/api/v1/users/
+GET https://api.openuserdata.xyz/api/v1/users/<username>/
 ```
 
 Creators have application instances which users are created under that application. Creators have their specific enpoints to make request to, this endpoints can be shared with others.
 
 ```BASH
-GET https://openuserdata.com/api/v1/<cid>/<app_name>/users/
-GET https://openuserdata.com/api/v1/<cid>/<app_name>/users/<username>/
-GET https://openuserdata.com/api/v1/<cid>/<app_name>/users/app/i/
-POST https://openuserdata.com/api/v1/<cid>/<app_name>/users/app/add/
-PUT https://openuserdata.com/api/v1/<cid>/<app_name>/users/app/i/update/
-PATCH https://openuserdata.com/api/v1/<cid>/<app_name>/users/app/i/update/
-DELETE https://openuserdata.com/api/v1/<cid>/<app_name>/users/app/i/delete/
+GET https://api.openuserdata.xyz/api/v1/<cid>/<app_name>/users/
+GET https://api.openuserdata.xyz/api/v1/<cid>/<app_name>/users/<username>/
+GET https://api.openuserdata.xyz/api/v1/<cid>/<app_name>/users/app/i/
+POST https://api.openuserdata.xyz/api/v1/<cid>/<app_name>/users/app/add/
+PUT https://api.openuserdata.xyz/api/v1/<cid>/<app_name>/users/app/i/update/
+PATCH https://api.openuserdata.xyz/api/v1/<cid>/<app_name>/users/app/i/update/
+DELETE https://api.openuserdata.xyz/api/v1/<cid>/<app_name>/users/app/i/delete/
 ```
 
 But remember certain endpoints requires authentication.
