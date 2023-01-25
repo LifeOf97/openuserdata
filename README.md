@@ -15,6 +15,8 @@
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=plastic&logo=docker&logoColor=white)
 ![Azure](https://img.shields.io/badge/azure-%230072C6.svg?style=plastic&logo=microsoftazure&logoColor=white)
 
+# Please Note
+Service is currently down, please bear with me while i search for a free hosting service.
 
 # Open Users Data
 ### Hello There.
